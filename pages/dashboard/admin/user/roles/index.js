@@ -22,7 +22,7 @@ export default function Roles() {
     const [data, setData] = useState();
     const [role, setRole] = useState({});
     async function getAllRoles(){
-        httpResource.get("/auth/roles", localStorage.getItem('Authorization')).then(value => {
+        httpResource.get("/roles", localStorage.getItem('Authorization')).then(value => {
             value.json().then(value => {
                 setRoles(value)
             });
@@ -35,7 +35,7 @@ export default function Roles() {
     async function handleEditRole(roleId) {
         console.log("EditRole")
         console.log(roleId)
-        httpResource.get("/auth/roles?roleId=" + roleId, localStorage.getItem('Authorization')).then(value => {
+        httpResource.get("/roles?roleId=" + roleId, localStorage.getItem('Authorization')).then(value => {
             value.json().then(value => {
                 setRole(value)
                 console.log(value)
@@ -47,7 +47,7 @@ export default function Roles() {
         console.log("EditRole")
         console.log(role.id)
         if(role.id != null || role.id != undefined) {
-            httpResource.post("/auth/roles/edit", JSON.stringify(role), localStorage.getItem('Authorization')).then(value => {
+            httpResource.post("/roles/edit", JSON.stringify(role), localStorage.getItem('Authorization')).then(value => {
                 value.json().then(value => {
                     console.log(value)
                 });
