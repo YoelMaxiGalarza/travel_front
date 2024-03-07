@@ -20,7 +20,6 @@ export class AuthenticationManager {
             }
         }).then(value => {
             value.json().then(data => {
-                console.log(data)
                 try {
                     localStorage.setItem('Username', data.username)
                     let rolesData = ""

@@ -7,15 +7,15 @@ import Link from "next/link";
 export default function Dashboard() {
     const [t, i18n] = useTranslation("common");
     const httpResource = useContext(HttpResourceFactoryContext);
-    const [isAdmin , setIsAdmin] = useState(true);
+    const [isAdmin , setIsAdmin] = useState(false);
     useEffect(() => {
-
-
-
-    }, [httpResource]);
+        let roles = localStorage.getItem("Roles");
+        if (roles.includes("ROLE_ADMIN")) {
+            setIsAdmin(true);
+        }
+    }, []);
     return (<>
         <UserNavbar >
-
             {isAdmin ? (<>
                 <li><Link type="button" className="nav-link" href="/dashboard/admin">{t("admin")}</Link></li>
             </>) : null}
