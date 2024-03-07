@@ -1,4 +1,4 @@
-import UserNavbar from "../../../../components/nav/UserNavbar";
+import UserNavbar from "../../../../components/navbar/UserNavbar";
 import Footer from "../../../../components/core/footer";
 import {useEffect} from "react";
 import CreateTripView from "../../../../components/trip/CreateTripView";

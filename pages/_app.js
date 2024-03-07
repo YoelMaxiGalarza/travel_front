@@ -1,4 +1,3 @@
-
 /**
  * App
  */
@@ -29,11 +28,11 @@ function MyApp({Component, pageProps}) {
 
     return (<>
         <SSRProvider>
-                <I18nextProvider i18n={i18next}>
-                    <CustomHead></CustomHead>
-                    <Component {...pageProps}/>
-                    <Footer></Footer>
-                </I18nextProvider>
+            <I18nextProvider i18n={i18next}>
+                <CustomHead></CustomHead>
+                <Component {...pageProps}/>
+                <Footer></Footer>
+            </I18nextProvider>
         </SSRProvider>
     </>);
 }

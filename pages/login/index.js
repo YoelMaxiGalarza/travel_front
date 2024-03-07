@@ -1,39 +1,29 @@
 import {useContext, useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation'
-import TopNavbar from "../../components/nav/TopNavbar";
-import Footer from "../../components/core/footer";
 import {useTranslation} from "react-i18next";
-import axios from "axios";
-import {HttpResourceFactoryContext} from "../../components/core/context";
+import {AuthenticationManager} from "../../components/core/authentication/AuthenticationManager";
 
 export default function Login() {
 
     const [t, i18n] = useTranslation("common");
-    const http = useContext(HttpResourceFactoryContext);
-
+    const authenticationManager = AuthenticationManager.create();
     const router = useRouter()
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
     async function handleSubmitForm(event) {
-        event.preventDefault();
+        event.preventDefault()
         try {
-            const request = await http.authenticate(username, password).then(value1 => {
-
-                if (value1 != {}) {
-                    router.push("/dashboard")
-                } else {
-                    router.push("/login")
-                }
-
-            });
+           await authenticationManager.login(username, password);
+           router.push("/dashboard")
         } catch (e) {
             console.error(e) //FIXME TRAV-1
-            router.push("/login")
+            // router.push("/login")
         }
     }
 
     return (<>
+        <br/>
         <form id='loginform' className="container" onSubmit={handleSubmitForm}>
             <div className="mb-3">
                 <label htmlFor="usernameInput" className="form-label">{t("usernameInput")}</label>

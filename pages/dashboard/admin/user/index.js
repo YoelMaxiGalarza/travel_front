@@ -1,12 +1,13 @@
-import AdminNavbar from "../../../../components/nav/AdminNavbar";
-import Footer from "../../../../components/core/footer";
+import AdminNavbar from "../../../../components/navbar/AdminNavbar";
+import UserNavbar from "../../../../components/navbar/UserNavbar";
 
 export default function UserManagement() {
     return (
         <>
-            <AdminNavbar/>
+            <UserNavbar>
+                <AdminNavbar/>
+            </UserNavbar>
 
-            <Footer/>
     </>
     )
 }

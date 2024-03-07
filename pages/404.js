@@ -1,4 +1,4 @@
-import TopNavbar from "../components/nav/TopNavbar";
+import TopNavbar from "../components/navbar/TopNavbar";
 import Footer from "../components/core/footer";
 
 export default function error404() {

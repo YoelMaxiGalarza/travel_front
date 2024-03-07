@@ -1,26 +1,26 @@
-import Footer from "../../components/core/footer";
 import {useTranslation} from "react-i18next";
-import {useContext, useEffect} from "react";
-import UserNavbar from "../../components/nav/UserNavbar";
+import {useContext, useEffect, useState} from "react";
+import UserNavbar from "../../components/navbar/UserNavbar";
 import {HttpResourceFactoryContext} from "../../components/core/context";
+import Link from "next/link";
 
 export default function Dashboard() {
     const [t, i18n] = useTranslation("common");
-    const resourceFactory = useContext(HttpResourceFactoryContext);
+    const httpResource = useContext(HttpResourceFactoryContext);
+    const [isAdmin , setIsAdmin] = useState(true);
     useEffect(() => {
 
-        let auth = localStorage.getItem("Authorization");
-        console.log(auth)
-        const response = resourceFactory.get('/location',auth);
 
-        response.then((res) => {
-            res.json().then((data) => {
-                console.log(data);
-            });
-        });
-    }, []);
+
+    }, [httpResource]);
     return (<>
-        <UserNavbar/>
+        <UserNavbar >
+
+            {isAdmin ? (<>
+                <li><Link type="button" className="nav-link" href="/dashboard/admin">{t("admin")}</Link></li>
+            </>) : null}
+        </UserNavbar>
+
         <div className="row">
             <div className="col-sm-2">asd</div>
             <div className="col-sm-2">

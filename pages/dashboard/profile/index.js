@@ -1,16 +1,25 @@
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
+import Image from "next/image";
 
-function Index() {
+function Profile() {
     const [t, i18n] = useTranslation("common");
 
     let [countrySelectorValues, setCountrySelectorValues] = useState([])
     let [citySelectorValues, setCitySelectorValues] = useState([])
     let [provinceSelectorValues, setProvinceSelectorValues] = useState([])
 
-    let [countryId,setCountryId]= useState(null)
+    let [countryId, setCountryId] = useState(null)
 
+    let user = {
+        name: "Martin",
+        surname: "Perez",
+        email: "",
+        isDriver: false,
+        country: "",
+        province: "",
 
+    }
     async function GetCountrySelectorValues() {
 
         const request = await fetch("http://localhost:8080/app/country/", {
@@ -18,8 +27,7 @@ function Index() {
 
             headers: {
                 'Accept': 'application/json', 'Content-Type': 'application/json'
-            },
-            mode: "cors"
+            }, mode: "cors"
 
         })
         if (request.ok) {
@@ -36,15 +44,15 @@ function Index() {
         }
 
     }
-async function GetProvinceSelectorValues() {
+
+    async function GetProvinceSelectorValues() {
 
         const request = await fetch("http://localhost:8080/app/country/?countryId=", {
             method: "GET",
 
             headers: {
                 'Accept': 'application/json', 'Content-Type': 'application/json'
-            },
-            mode: "cors"
+            }, mode: "cors"
 
         })
         if (request.ok) {
@@ -80,7 +88,7 @@ async function GetProvinceSelectorValues() {
                 <div className="col-sm-2"></div>
                 <div className="col">
                     <div className="card">
-                        <img src="/img/user.png" className="profile-img " alt="userprofilepicture"/>
+                        <Image src="/img/user.png" className="profile-img " alt="userprofilepicture"/>
                         <form className="">
                             <div className="card-body">
                                 <div className="mb-3">
@@ -152,5 +160,5 @@ async function GetProvinceSelectorValues() {
 
 }
 
-export default Index;
+export default Profile;
 

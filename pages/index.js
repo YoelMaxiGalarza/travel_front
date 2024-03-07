@@ -1,18 +1,21 @@
-import TopNavbar from "../components/nav/TopNavbar";
-import Footer from "../components/core/footer";
+import TopNavbar from "../components/navbar/TopNavbar";
 import {useTranslation} from "react-i18next";
-import CustomHead from "../components/core/head/CustomHead";
+import {useEffect} from "react";
+import Link from "next/link";
+import Image from "next/Image";
 
 export default function Index() {
     const [t, i18n] = useTranslation("common");
+    useEffect(() => {
 
+    }, []);
     return (<>
         <TopNavbar>
-            <li><a className="nav-link  " aria-current="page" href="/login">{t("login.tag")}</a></li>
-            <li><a className="nav-link " aria-current="page" href="/signin">{t("signin")}</a></li>
+            <li><Link className="nav-link  " aria-current="page" href="/login">{t("login.tag")}</Link></li>
+            <li><Link className="nav-link " aria-current="page" href="/signin">{t("signin")}</Link></li>
         </TopNavbar>
         <div className="container-fluid">
-                {/*<img className="container-fluid hero-img" src={"/img/landscape_1.jpg"}/>*/}
+
         </div>
     </>)
 }

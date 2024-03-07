@@ -1,4 +1,4 @@
-import AdminNavbar from "../../../../../components/nav/AdminNavbar";
+import AdminNavbar from "../../../../../components/navbar/AdminNavbar";
 import Footer from "../../../../../components/core/footer";
 import {useTranslation} from "react-i18next";
 import {useContext, useEffect, useState} from "react";
@@ -35,7 +35,7 @@ export default function Create() {
                 setRoles(value)
             });
          });
-    }, []);
+    }, [httpResource]);
     return (<>
         <AdminNavbar/>
         <div className="container ">
