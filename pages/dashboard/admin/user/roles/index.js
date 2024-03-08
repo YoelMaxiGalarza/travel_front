@@ -16,12 +16,11 @@ import {HttpResourceFactoryContext} from "../../../../../components/core/context
  */
 export default function Roles() {
     const [t, i18n] = useTranslation('common');
-    const router = useRouter();
-    const httpResource = useContext(HttpResourceFactoryContext);
+    const httpResource = HttpResourceFactory.create();
     const [roles, setRoles] = useState([{}]);
-    const [data, setData] = useState();
     const [role, setRole] = useState({});
     async function getAllRoles(){
+        setRoles([{}])
         httpResource.get("/roles", localStorage.getItem('Authorization')).then(value => {
             value.json().then(value => {
                 setRoles(value)
@@ -31,34 +30,45 @@ export default function Roles() {
     useEffect(() => {
         getAllRoles();
     }, []);
-
+    function resetForm() {
+        setRole({
+            name: "",
+            description: "",
+            disabled: false,
+            id: null
+        });
+    }
     async function handleEditRole(roleId) {
         console.log("EditRole")
         console.log(roleId)
         httpResource.get("/roles?roleId=" + roleId, localStorage.getItem('Authorization')).then(value => {
             value.json().then(value => {
                 setRole(value)
-                console.log(value)
             });
         });
     }
 
-    async function editRole() {
+    async function editRole(event) {
+        event.preventDefault();
         console.log("EditRole")
         console.log(role.id)
         if(role.id != null || role.id != undefined) {
+            console.log(role)
             httpResource.post("/roles/edit", JSON.stringify(role), localStorage.getItem('Authorization')).then(value => {
                 value.json().then(value => {
-                    console.log(value)
+                    resetForm();
+                    getAllRoles();
                 });
             });
         }else{
             httpResource.post("/roles/create", JSON.stringify(role), localStorage.getItem('Authorization')).then(value => {
                 value.json().then(value => {
-                    console.log(value)
+                    resetForm();
+                    getAllRoles();
                 });
             });
         }
+        setRole({})
 
     }
 
@@ -66,9 +76,10 @@ export default function Roles() {
         <UserNavbar>
             <AdminNavbar/>
         </UserNavbar>
-        <h1>Roles</h1>
+
         <div className="mb-3">
             <div className="row">
+                <h1>Roles</h1>
                 <div className="col">
                     <table className="table">
                         <thead>
@@ -88,16 +99,15 @@ export default function Roles() {
                                 <td>{role.name}</td>
                                 <td>{role.description}</td>
                                 <td><input className="form-check-input" type="checkbox" value="" id="flexCheckChecked"
-                                           defaultChecked={!role.disabled}/></td>
+                                           defaultChecked={!role.disabled} disabled/></td>
                             </tr>
                         })}
-
                         </tbody>
                     </table>
                 </div>
                 <div className="col">
-                    <h2>Role</h2>
-                    <form onSubmit={editRole}>
+                    <h2>Edit/Create</h2>
+                    <form href="#" onSubmit={editRole}>
                         <div className="mb-3">
                             <input type="text" hidden className="form-control-plaintext " readOnly id="id"
                                    value={role.id}/>
@@ -121,7 +131,9 @@ export default function Roles() {
                                    }}/>
                             <label className="form-check-label" htmlFor="disabled">{t("enabled")}</label>
                         </div>
-                        <button type="submit" className="btn btn-primary">{t("save")}</button>
+                        <div className="row-sm-2">
+                            <input className="btn btn-primary" type='submit' value='Submit'/>
+                        </div>
                     </form>
                 </div>
             </div>
