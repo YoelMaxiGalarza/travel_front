@@ -18,26 +18,6 @@ export class AuthenticationManager {
                 'Access-Control-Allow-Origin': '*',
                 'Authorization': 'Basic ' + btoa(username + ':' + password)
             }
-        }).then(value => {
-            value.json().then(data => {
-                try {
-                    localStorage.setItem('Username', data.username)
-                    let rolesData = ""
-                    var roles = data.roles;
-                    for (let i = 0; i < roles.length; i++) {
-                        if (i == (roles.length - 1)) {
-                            rolesData += roles[i].role
-                        } else {
-                            rolesData += roles[i].role + ","
-                        }
-                    }
-                    localStorage.setItem('Roles', rolesData)
-                    localStorage.setItem('Authorization', 'Basic ' + data.base64EncodedAuthenticationKey)
-                } catch (e) {
-                    console.error(e)
-                }
-
-            })
         })
     }
 

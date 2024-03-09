@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 
 
-import {HttpResourceFactory} from "../core/factory/HttpResourceFactory";
 //https://www.npmjs.com/package/react-time-picker?activeTab=readme
 import 'react-time-picker/dist/TimePicker.css';
 import 'react-clock/dist/Clock.css';
@@ -11,20 +10,23 @@ import {TimePicker} from "react-time-picker";
 import {DatePicker} from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
+import {HttpResourceFactory} from "../../../../components/core/factory/HttpResourceFactory";
 
-export default function CreateTripView() {
+export default function EditTrip() {
 
     const [t, i18n] = useTranslation("common");
     const http = HttpResourceFactory.create();
     const router = useRouter();
-    const [fromCountryDepartureSelectorValues, setFromCountryDepartureSelectorValues] = useState([])
-    const [fromProvinceDepartureSelectorValues, setFromProvinceDepartureSelectorValues] = useState([])
-    const [fromCityDepartureSelectorValues, setFromCityDepartureSelectorValues] = useState([])
-    const [toCountryDepartureSelectorVales, setToCountryDepartureSelectorVales] = useState([])
-    const [toCityDepartureSelectorValues, setToCityDepartureSelectorValues] = useState([])
-    const [toProvinceDepartureSelectorValues, setToProvinceDepartureSelectorValues] = useState([])
+    const params = useSearchParams();
+    const [fromCountrySelectorValues, setFromCountrySelectorValues] = useState([])
+    const [fromProvinceSelectorValues, setFromProvinceSelectorValues] = useState([])
+    const [fromCitySelectorvalues, setFromCitySelectorvalues] = useState([])
+    const [toCountrySelectorValues, setToCountrySelectorValues] = useState([])
+    const [toCitySelectorvalues, setToCitySelectorvalues] = useState([])
+    const [toProvinceSelectorValues, setToProvinceSelectorValues] = useState([])
 
+    const [tripData, setTripData] = useState({});
     const [fromCountryId, setFromCountryId] = useState(null)
     const [fromProvinceId, setFromProvinceId] = useState(null)
     const [fromCityId, setFromCityId] = useState(null)
@@ -37,7 +39,7 @@ export default function CreateTripView() {
     const [description, setDescription] = useState("");
 
     function handleSubmit(event) {
-        if(!fromCountryId || !fromProvinceId || !fromCityId || !toCountryId || !toProvinceId || !toCityId || !passengers || !departureDate || !departureTime || !description){
+        if (!fromCountryId || !fromProvinceId || !fromCityId || !toCountryId || !toProvinceId || !toCityId || !passengers || !departureDate || !departureTime || !description) {
             alert("Please fill all the fields");
             event.preventDefault();
             return;
@@ -57,26 +59,48 @@ export default function CreateTripView() {
         }
 
         http.post("/location/create", JSON.stringify(tripData), localStorage.getItem("Authorization")).then((response) => {
-            setToCountryDepartureSelectorVales([])
-            setToProvinceDepartureSelectorValues([])
-            setToCityDepartureSelectorValues([]);
-            setFromCountryDepartureSelectorValues([])
-            setFromProvinceDepartureSelectorValues([])
-            setFromCityDepartureSelectorValues([])
+            setToCountrySelectorValues([])
+            setToProvinceSelectorValues([])
+            setToCitySelectorvalues([]);
+            setFromCountrySelectorValues([])
+            setFromProvinceSelectorValues([])
+            setFromCitySelectorvalues([])
             router.push("/dashboard/trips");
         });
     }
 
 
-    const GetCountryData = () => {
+    const GetCountryData = (fromto) => {
         try {
             http.get("/location", localStorage.getItem("Authorization")).then((response) => {
                 response.json().then((data) => {
                     let countries = data.map((country) => {
-                        return <option key={country.id} value={country.id}>{country.name}</option>
+                        if (fromto === "from") {
+                            if (country.id === tripData.fromCountryId.id) {
+                                return <option key={country.id} value={country.id}
+                                               selected={true}>{country.name}</option>
+                            } else {
+                                return <option key={country.id}
+                                               value={country.id}>{country.name}</option>
+                            }
+                        } else if (fromto === "to") {
+                            if (country.id === tripData.fromCountryId.id) {
+                                return <option key={country.id} value={country.id}
+                                               selected={true}>{country.name}</option>
+                            } else {
+                                return <option key={country.id}
+                                               value={country.id}>{country.name}</option>
+                            }
+                        }
+
+
                     });
-                    setFromCountryDepartureSelectorValues(countries);
-                    setToCountryDepartureSelectorVales(countries);
+                    if(fromto === "from"){
+                        setFromCountrySelectorValues(countries);
+
+                    }else if (fromto === "to"){
+                        setToCountrySelectorValues(countries);
+                    }
                 });
             });
         } catch (error) {
@@ -89,9 +113,10 @@ export default function CreateTripView() {
             http.get("/location?countryId=" + countryId, localStorage.getItem("Authorization")).then((response) => {
                 response.json().then((data) => {
                     let countries = data.map((country) => {
-                        return <option key={country.id} value={country.id}>{country.name}</option>
+                        return <option key={country.id}
+                                       value={country.id}>{country.name}</option>
                     });
-                    setFromProvinceDepartureSelectorValues(countries);
+                    setFromProvinceSelectorValues(countries);
                 });
             });
             setFromCountryId(countryId);
@@ -99,9 +124,10 @@ export default function CreateTripView() {
             http.get("/location?countryId=" + countryId, localStorage.getItem("Authorization")).then((response) => {
                 response.json().then((data) => {
                     let countries = data.map((province) => {
-                        return <option key={province.id} value={province.id}>{province.name}</option>
+                        return <option key={province.id}
+                                       value={province.id}>{province.name}</option>
                     });
-                    setToProvinceDepartureSelectorValues(countries);
+                    setToProvinceSelectorValues(countries);
                 });
             });
             setToCountryId(countryId);
@@ -115,9 +141,10 @@ export default function CreateTripView() {
                 .then((response) => {
                     response.json().then((data) => {
                         let countries = data.map((country) => {
-                            return <option key={country.id} value={country.id}>{country.name}</option>
+                            return <option key={country.id}
+                                           value={country.id}>{country.name}</option>
                         });
-                        setFromCityDepartureSelectorValues(countries);
+                        setFromCitySelectorvalues(countries);
                     });
                 });
             setFromProvinceId(provinceId);
@@ -126,9 +153,10 @@ export default function CreateTripView() {
                 .then((response) => {
                     response.json().then((data) => {
                         let countries = data.map((province) => {
-                            return <option key={province.id} value={province.id}>{province.name}</option>
+                            return <option key={province.id}
+                                           value={province.id}>{province.name}</option>
                         });
-                        setToCityDepartureSelectorValues(countries);
+                        setToCitySelectorvalues(countries);
                     });
                 });
             setToProvinceId(provinceId);
@@ -144,9 +172,24 @@ export default function CreateTripView() {
     }
 
     useEffect(() => {
-        GetCountryData()
-    }, []);
+        let locationId = params.get("locationId");
 
+        if (locationId != null || locationId != undefined) {
+            GetCountryData()
+            http.get("/location/get?locationId=" + locationId,
+                localStorage.getItem('Authorization')).then(response => {
+                response.json().then(value => {
+                    setTripData(value)
+
+                })
+            }).catch(error => {
+                console.log(error);
+            });
+        } else {
+            // router.push("/dashboard/trip");
+        }
+
+    }, [params]);
 
     return (<>
         <br/>
@@ -168,12 +211,12 @@ export default function CreateTripView() {
                                     <select name="fromCountrySelector" id="fromCountrySelector"
                                             className="form-select" required={true}
                                             onChange={(e) => {
-                                                setFromProvinceDepartureSelectorValues([])
-                                                setFromCityDepartureSelectorValues([]);
+                                                setFromProvinceSelectorValues([])
+                                                setFromCitySelectorvalues([]);
                                                 GetProvinceData("from", e.target.value);
                                             }}>
                                         <option>{t("select")}</option>
-                                        {fromCountryDepartureSelectorValues}
+                                        {fromCountrySelectorValues}
                                     </select>
                                 </div>
                             </div>
@@ -181,11 +224,12 @@ export default function CreateTripView() {
                                 <label htmlFor="fromProvinceSelector"
                                        className="col-sm-3 col-form-label">{t("provincestate")}</label>
                                 <div className="col">
-                                    <select name="fromProvinceSelector" id="fromProvinceSelector"
+                                    <select name="fromProvinceSelector"
+                                            id="fromProvinceSelector"
                                             className="form-select"
                                             onChange={(e) => GetCityData("from", e.target.value)}>
                                         <option>{t("select")}</option>
-                                        {fromProvinceDepartureSelectorValues}
+                                        {fromProvinceSelectorValues}
                                     </select>
                                 </div>
                             </div>
@@ -193,12 +237,13 @@ export default function CreateTripView() {
                                 <label htmlFor="fromCitySelector"
                                        className="col-sm-3 col-form-label">{t("citySelector")}</label>
                                 <div className="col">
-                                    <select name="fromCitySelector" id="fromCitySelector" className="form-select"
+                                    <select name="fromCitySelector" id="fromCitySelector"
+                                            className="form-select"
                                             onChange={(e) => {
                                                 storeCityData("from", e.target.value)
                                             }}>
                                         <option>{t("select")}</option>
-                                        {fromCityDepartureSelectorValues}
+                                        {fromCitySelectorvalues}
                                     </select>
                                 </div>
                             </div>
@@ -211,14 +256,15 @@ export default function CreateTripView() {
                                 <label htmlFor="toCountrySelector"
                                        className="col-sm-3 col-form-label">{t("country")}</label>
                                 <div className="col">
-                                    <select name="toCountrySelector" id="toCountrySelector" className="form-select"
+                                    <select name="toCountrySelector" id="toCountrySelector"
+                                            className="form-select"
                                             onChange={(e) => {
-                                                setToProvinceDepartureSelectorValues([])
-                                                setToCityDepartureSelectorValues([]);
+                                                setToProvinceSelectorValues([])
+                                                setToCitySelectorvalues([]);
                                                 GetProvinceData("to", e.target.value);
                                             }}>
                                         <option>{t("select")}</option>
-                                        {toCountryDepartureSelectorVales}
+                                        {toCountrySelectorValues}
                                     </select>
                                 </div>
                             </div>
@@ -230,7 +276,7 @@ export default function CreateTripView() {
                                             className="form-select"
                                             onChange={(e) => GetCityData("to", e.target.value)}>
                                         <option>{t("select")}</option>
-                                        {toProvinceDepartureSelectorValues}
+                                        {toProvinceSelectorValues}
                                     </select>
                                 </div>
                             </div>
@@ -238,12 +284,13 @@ export default function CreateTripView() {
                                 <label htmlFor="toCitySelector"
                                        className="col-sm-3 col-form-label">{t("citySelector")}</label>
                                 <div className="col">
-                                    <select name="toCitySelector" id="toCitySelector" className="form-select"
+                                    <select name="toCitySelector" id="toCitySelector"
+                                            className="form-select"
                                             onChange={(e) => {
                                                 storeCityData("to", e.target.value)
                                             }}>
                                         <option>{t("select")}</option>
-                                        {toCityDepartureSelectorValues}
+                                        {toCitySelectorvalues}
                                     </select>
                                 </div>
                             </div>
@@ -254,7 +301,8 @@ export default function CreateTripView() {
                                 <label htmlFor="passengers"
                                        className="col-sm-3 col-form-label">{t("passengers")}</label>
                                 <div className="col">
-                                    <select name="passengers" id="passengers" className="form-select"
+                                    <select name="passengers" id="passengers"
+                                            className="form-select"
                                             onChange={(e) => {
                                                 setPassengers(e.target.value)
                                             }}>
@@ -275,8 +323,10 @@ export default function CreateTripView() {
                             <br/>
 
                             <div className="row">
-                                <label htmlFor="TripDescription" className="form-label">{t("description")}</label>
-                                <textarea className="form-control" id="TripDescription" rows="4"
+                                <label htmlFor="TripDescription"
+                                       className="form-label">{t("description")}</label>
+                                <textarea className="form-control" id="TripDescription"
+                                          rows="4"
                                           onChange={event => {
                                               setDescription(event.target.value);
                                           }}></textarea>
@@ -308,7 +358,8 @@ export default function CreateTripView() {
                         <div className="row submit">
                             <div className="col"></div>
                             <div className="col">
-                                <input className="btn btn-primary" type='submit' value='Submit'/>
+                                <input className="btn btn-primary" type='submit'
+                                       value='Submit'/>
                             </div>
                             <div className="col"></div>
                         </div>
@@ -326,5 +377,3 @@ export default function CreateTripView() {
     </>)
 
 }
-
-//https://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript

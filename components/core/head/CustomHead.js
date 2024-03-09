@@ -20,7 +20,6 @@ export default function CustomHead() {
             <link href="/styles/fontawesome-free-6.5.1/css/all.css" rel="stylesheet"/>
             <link href="/styles/index.css" rel="stylesheet"/>
         </Head>
-        <Script src="https://kit.fontawesome.com/da97e690a6.js" crossOrigin={true}></Script>
 
     </>)
 }

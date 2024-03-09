@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import {useState} from 'react';
 import {useRouter} from 'next/navigation'
 import {useTranslation} from "react-i18next";
 import {AuthenticationManager} from "../../components/core/authentication/AuthenticationManager";
@@ -13,13 +13,19 @@ export default function Login() {
 
     async function handleSubmitForm(event) {
         event.preventDefault()
-        try {
-           await authenticationManager.login(username, password);
-           router.push("/dashboard")
-        } catch (e) {
-            console.error(e) //FIXME TRAV-1
-            // router.push("/login")
-        }
+        authenticationManager.login(username, password).then((result) => {
+
+            if (result.status === 401) {
+                localStorage.clear()
+                router.push("/login")
+            } else if (result.status === 200) {
+                result.json().then((data) => {
+                    localStorage.setItem('Authorization', 'Basic ' + data.base64EncodedAuthenticationKey)
+                    localStorage.setItem('Username', data.username )
+                    router.push("/dashboard")
+                });
+            }
+        });
     }
 
     return (<>
@@ -39,7 +45,7 @@ export default function Login() {
                 }}
                 />
             </div>
-            <input className="btn btn-primary" type='submit' value={t("login.tag")}/>
+            <input className="btn btn-primary" type='submit' value="Submit"/>
         </form>
     </>)
 }

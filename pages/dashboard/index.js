@@ -7,12 +7,12 @@ import Link from "next/link";
 export default function Dashboard() {
     const [t, i18n] = useTranslation("common");
     const httpResource = useContext(HttpResourceFactoryContext);
-    const [isAdmin , setIsAdmin] = useState(false);
+    const [isAdmin , setIsAdmin] = useState(true);
     useEffect(() => {
-        let roles = localStorage.getItem("Roles");
-        if (roles.includes("ROLE_ADMIN")) {
-            setIsAdmin(true);
-        }
+        // let roles = localStorage.getItem("Roles");
+        // if (roles.includes("ROLE_ADMIN")) {
+        //     setIsAdmin(true);
+        // }
     }, []);
     return (<>
         <UserNavbar >
