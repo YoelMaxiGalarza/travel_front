@@ -9,6 +9,7 @@ import common_en from "../i18lang/common_en.json";
 import common_es from "../i18lang/common_es.json";
 import Footer from "../components/core/footer";
 import CustomHead from "../components/core/head/CustomHead";
+import {useEffect} from "react";
 
 
 function MyApp({Component, pageProps}) {
@@ -25,7 +26,9 @@ function MyApp({Component, pageProps}) {
                 }
             },
         });
+    useEffect(() => {
 
+    }, []);
     return (<>
         <SSRProvider>
             <I18nextProvider i18n={i18next}>
