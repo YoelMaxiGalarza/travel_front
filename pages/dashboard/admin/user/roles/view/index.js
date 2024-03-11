@@ -30,14 +30,12 @@ export default function ViewRoles() {
             http.post("/roles/edit", JSON.stringify(role), localStorage.getItem('Authorization')).then(value => {
                 value.json().then(value => {
                     resetForm();
-                    getAllRoles();
                 });
             });
         } else {
             http.post("/roles/create", JSON.stringify(role), localStorage.getItem('Authorization')).then(value => {
                 value.json().then(value => {
                     resetForm();
-                    getAllRoles();
                 });
             });
         }

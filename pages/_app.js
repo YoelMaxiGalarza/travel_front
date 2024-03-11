@@ -26,9 +26,7 @@ function MyApp({Component, pageProps}) {
                 }
             },
         });
-    useEffect(() => {
 
-    }, []);
     return (<>
         <SSRProvider>
             <I18nextProvider i18n={i18next}>

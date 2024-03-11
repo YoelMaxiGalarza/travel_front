@@ -24,10 +24,11 @@ export class HttpResourceFactory {
         return this._doRequest(endpoint, "GET", null, this.headers)
     }
 
-    async post(endpoint, body, authorization) {
+    post(endpoint, body, authorization) {
         this.headers['Authorization'] = authorization
         return this._doRequest(endpoint, "POST", body, this.headers)
     }
+
 
 
 }

@@ -35,8 +35,8 @@ export default function Roles() {
     async function handleEditRole(roleId) {
         router.push({
             pathname: '/dashboard/admin/user/roles/view',
-            query: { roleId: roleId },
-        });
+            query: { roleId: roleId }
+        })
     }
 
 

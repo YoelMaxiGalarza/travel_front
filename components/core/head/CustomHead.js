@@ -14,9 +14,6 @@ export default function CustomHead() {
             <title>{initDataContext.name}</title>
             <meta name="description" content={initDataContext.description}/>
             <link rel="icon" href="/img/favicon.ico"/>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-                  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-                  crossOrigin="true"/>
             <link href="/styles/fontawesome-free-6.5.1/css/all.css" rel="stylesheet"/>
             <link href="/styles/index.css" rel="stylesheet"/>
         </Head>

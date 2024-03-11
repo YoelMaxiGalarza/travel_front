@@ -14,31 +14,131 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {HttpResourceFactory} from "../../../../components/core/factory/HttpResourceFactory";
 import UserNavbar from "../../../../components/navbar/UserNavbar";
 
+
 export default function EditTrip() {
+    const params = useSearchParams();
+    let locationId = params.get("locationId");
 
     const [t, i18n] = useTranslation("common");
     const http = HttpResourceFactory.create();
     const router = useRouter();
-    const params = useSearchParams();
-    const [fromCountrySelectorValues, setFromCountrySelectorValues] = useState([])
-    const [fromProvinceSelectorValues, setFromProvinceSelectorValues] = useState([])
-    const [fromCitySelectorValues, setFromCitySelectorValues] = useState([])
-    const [toCountrySelectorValues, setToCountrySelectorValues] = useState([])
-    const [toProvinceSelectorValues, setToProvinceSelectorValues] = useState([])
-    const [toCitySelectorvalues, setToCitySelectorValues] = useState([])
+    const [locationData, setLocationData] = useState({
+        fromCountryId: 1,
+        fromProvinceId: 1,
+        fromCityId: 1,
+        toCountryId: 1,
+        toProvinceId: 1,
+        toCityId: 1,
+        passengers: 1,
+        departureDate: new Date(),
+        departureTime: "12:00",
+        description: "",
+    })
+    const [fromCountryDepartureSelectorValues, setFromCountryDepartureSelectorValues] = useState([])
+    const [fromProvinceDepartureSelectorValues, setFromProvinceDepartureSelectorValues] = useState([])
+    const [fromCityDepartureSelectorValues, setFromCityDepartureSelectorValues] = useState([])
+    const [toCountryDepartureSelectorVales, setToCountryDepartureSelectorVales] = useState([])
+    const [toCityDepartureSelectorValues, setToCityDepartureSelectorValues] = useState([])
+    const [toProvinceDepartureSelectorValues, setToProvinceDepartureSelectorValues] = useState([])
+    const GetCountryData = async (fromto, countryId) => {
 
-    const [fromCountryId, setFromCountryId] = useState(1)
-    const [fromProvinceId, setFromProvinceId] = useState(1)
-    const [fromCityId, setFromCityId] = useState(1)
-    const [toCountryId, setToCountryId] = useState(1)
-    const [toProvinceId, setToProvinceId] = useState(1)
-    const [toCityId, setToCityId] = useState(1)
-    const [passengers, setPassengers] = useState(1)
-    const [departureDate, setDepartureDate] = useState(new Date());
-    const [departureTime, setDepartureTime] = useState('12:00');
-    const [description, setDescription] = useState("");
+        http.get("/country", localStorage.getItem("Authorization")).then((response) => {
+            response.json().then((data) => {
 
-    let locationId = params.get("locationId");
+                let countries = data.map((country) => {
+                    if (country.id == countryId) {
+                        return <option key={country.id} value={country.id}
+                                       selected={true}>{country.name}</option>
+                    } else {
+                        return <option key={country.id}
+                                       value={country.id}>{country.name}</option>
+                    }
+
+                });
+                if (fromto === "from") {
+                    setFromCountryDepartureSelectorValues(countries);
+                } else {
+                    setToCountryDepartureSelectorVales(countries);
+
+                }
+            });
+        });
+        setLocationData({...locationData, fromCountryId: countryId})
+
+    }
+
+    async function GetProvinceData(fromto, countryId, provinceId) {
+        http.get("/province?countryId=" + countryId, localStorage.getItem("Authorization")).then((response) => {
+            response.json().then((data) => {
+                let countries = data.map((province) => {
+                    if (province.id == provinceId) {
+                        return <option key={province.id} value={province.id}
+                                       selected={true}>{province.name}</option>
+                    } else {
+                        return <option key={province.id}
+                                       value={province.id}>{province.name}</option>
+                    }
+                });
+                if (fromto == "from") {
+                    setFromProvinceDepartureSelectorValues(countries);
+                } else {
+                    setToProvinceDepartureSelectorValues(countries);
+                }
+            });
+        });
+        setLocationData({...locationData, fromCountryId: countryId})
+    }
+
+    async function GetCityData(fromto, provinceId) {
+        http.get("/city?provinceId=" + provinceId, localStorage.getItem("Authorization"))
+            .then((response) => {
+                response.json().then((data) => {
+                    let countries = data.map((country) => {
+                        return <option key={country.id}
+                                       value={country.id}>{country.name}</option>
+                    });
+                    if (fromto === "from") {
+                        setFromCityDepartureSelectorValues(countries);
+                    } else {
+                        setToCityDepartureSelectorValues(countries);
+                    }
+                });
+            });
+    }
+
+    async function storeCityData(fromto, cityId) {
+        if (fromto === "from") {
+            setLocationData({...locationData, fromCityId: cityId})
+        } else {
+            setLocationData({...locationData, toCityId: cityId})
+        }
+    }
+
+    useEffect(() => {
+
+        if (locationId != null || locationId != undefined) {
+            http.get("/location/get?locationId=" + locationId, localStorage.getItem('Authorization')).then(async response => {
+                response.json().then(async value => {
+                    console.log(value)
+                    setLocationData(value)
+                })
+            }).then(value => {
+                GetCountryData("from", locationData.fromCountryId);
+                GetCountryData("to", locationData.toCountryId);
+            }).then(value => {
+                GetProvinceData("from", locationData.fromCountryId,locationData.fromProvinceId)
+                GetProvinceData("to", locationData.toCountryId,locationData.toProvinceId)
+            }).then(value => {
+                GetCityData("from", locationData.fromProvinceId)
+                GetCityData("to", locationData.toProvinceId)
+            }).catch(error => {
+                console.log(error);
+            });
+        } else {
+            // router.push("/dashboard/trip");
+        }
+
+    }, []);
 
 
     function handleSubmit(event) {
@@ -49,165 +149,22 @@ export default function EditTrip() {
         }
         event.preventDefault();
         let tripData = {
-            "fromCountryId": fromCountryId,
-            "fromProvinceId": fromProvinceId,
-            "fromCityId": fromCityId,
-            "toCountryId": toCountryId,
-            "toProvinceId": toProvinceId,
-            "toCityId": toCityId,
-            "departureDate": departureDate,
-            "departureTime": departureTime,
-            "passengers": passengers,
-            "description": description,
+            "fromCountryId": locationData.fromCountryId,
+            "fromProvinceId": locationData.fromProvinceId,
+            "fromCityId": locationData.fromCityId,
+            "toCountryId": locationData.toCountryId,
+            "toProvinceId": locationData.toProvinceId,
+            "toCityId": locationData.toCityId,
+            "departureDate": locationData.departureDate,
+            "departureTime": locationData.departureTime,
+            "passengers": locationData.passengers,
+            "description": locationData.description,
         }
 
         http.post("/location/create", JSON.stringify(tripData), localStorage.getItem("Authorization")).then((response) => {
-            setToCountrySelectorValues([])
-            setToProvinceSelectorValues([])
-            setToCitySelectorvalues([]);
-            setFromCountrySelectorValues([])
-            setFromProvinceSelectorValues([])
-            setFromCitySelectorValues([])
             router.push("/dashboard/trips");
         });
     }
-
-
-    const GetCountryData = (fromto) => {
-
-        http.get("/location", localStorage.getItem("Authorization")).then((response) => {
-
-            response.json().then((data) => {
-
-                let countries = data.map((country) => {
-                    if (fromto == "from") {
-                        if (country.id == fromCountryId) {
-                            return <option key={country.id} value={country.id}
-                                           selected={true}>{country.name}</option>
-                        } else {
-                            return <option key={country.id}
-                                           value={country.id}>{country.name}</option>
-                        }
-                    } else if (fromto == "to") {
-                        if (country.id == toCountryId) {
-                            return <option key={country.id} value={country.id}
-                                           selected={true}>{country.name}</option>
-                        } else {
-                            return <option key={country.id}
-                                           value={country.id}>{country.name}</option>
-                        }
-                    }
-                });
-                if (fromto == "from") {
-                    setFromCountrySelectorValues(countries);
-                } else if (fromto == "to") {
-                    setToCountrySelectorValues(countries);
-
-                }
-            });
-        });
-    }
-
-    function GetProvinceData(fromto) {
-        let countryId = 1;
-        if(fromto == "from"){
-            countryId = fromCountryId;
-        }else if(fromto == "to"){
-            countryId = toCountryId;
-        }
-        http.get("/location?countryId=" + countryId, localStorage.getItem("Authorization")).then((response) => {
-            response.json().then((data) => {
-                let provinces = data.map((province) => {
-                    if (fromto = "from") {
-                        if (province.id == fromProvinceId) {
-                            return <option key={province.id} value={province.id}
-                                           selected={true}>{province.name}</option>
-                        } else {
-                            return <option key={province.id}
-                                           value={province.id}>{province.name}</option>
-                        }
-                    } else if (fromto == "to") {
-                        if (province.id == toProvinceId) {
-                            return <option key={province.id} value={province.id}
-                                           selected={true}>{province.name}</option>
-                        } else {
-                            return <option key={province.id}
-                                           value={province.id}>{province.name}</option>
-                        }
-                    }
-                });
-                if (fromto = "from") {
-                    setFromProvinceSelectorValues(provinces);
-                } else if (fromto == "to") {
-                    setToProvinceSelectorValues(provinces);
-                }
-            });
-        });
-
-    }
-
-    async function GetCityData(fromto) {
-        if (fromto === "from") {
-            http.get("/location?provinceId=" + fromProvinceId, localStorage.getItem("Authorization"))
-                .then((response) => {
-                    response.json().then((data) => {
-                        let cities = data.map((city) => {
-                            if(city.id == fromCityId){
-                                return <option key={city.id} value={city.id} selected={true}>{city.name}</option>
-                            }else{
-                                return <option key={city.id} value={city.id}>{city.name}</option>
-                            }
-                        });
-                        setFromCitySelectorValues(cities);
-                    });
-                });
-        } else if("to"){
-            http.get("/location?provinceId=" + fromProvinceId, localStorage.getItem("Authorization"))
-                .then((response) => {
-                    response.json().then((data) => {
-                        let cities = data.map((city) => {
-                            if(city.id == fromCityId){
-                                return <option key={city.id} value={city.id} selected={true}>{city.name}</option>
-                            }else{
-                                return <option key={city.id} value={city.id}>{city.name}</option>
-                            }
-                        });
-                        setToCitySelectorValues(cities);
-                    });
-                });
-        }
-    }
-
-    useEffect(() => {
-
-        if (locationId != null || locationId != undefined) {
-
-            http.get("/location/get?locationId=" + locationId, localStorage.getItem('Authorization')).then(async response => {
-                await response.json().then(value => {
-                    setFromCountryId(value.fromCountryId.id)
-                    setToCountryId(value.toCountryId.id)
-                    setFromProvinceId(value.fromProvinceId.id)
-                    setToProvinceId(value.toProvinceId.id)
-                    setFromCityId(value.fromCityId.id)
-                    setToCityId(value.toCityId.id)
-                    setPassengers(value.passengers)
-                    setDescription(value.description)
-
-                })
-                await GetCountryData("from")
-                await GetProvinceData("from")
-                await GetCityData("from")
-                await GetCountryData("to")
-                await GetProvinceData("to")
-                await GetCityData("to")
-            }).catch(error => {
-                console.log(error);
-            });
-        } else {
-            // router.push("/dashboard/trip");
-        }
-
-    }, []);
 
 
     return (<>
@@ -230,12 +187,18 @@ export default function EditTrip() {
                                 <div className="col">
                                     <select name="fromCountrySelector" id="fromCountrySelector"
                                             className="form-select" required={true}
-                                            value={fromCountryId}
+                                            value={locationData.fromCountryId}
                                             onChange={(e) => {
-
+                                                setLocationData({
+                                                    ...locationData,
+                                                    fromCountryId: e.target.value
+                                                })
+                                                setFromProvinceDepartureSelectorValues([])
+                                                setFromCityDepartureSelectorValues([])
+                                                GetProvinceData("from",locationData.fromCountryId, locationData.fromProvinceId);
                                             }}>
                                         <option>{t("select")}</option>
-                                        {fromCountrySelectorValues}
+                                        {fromCountryDepartureSelectorValues}
                                     </select>
                                 </div>
                             </div>
@@ -247,12 +210,17 @@ export default function EditTrip() {
                                             id="fromProvinceSelector"
                                             className="form-select"
                                             required={true}
-                                            value={fromProvinceId}
+                                            value={locationData.fromProvinceId}
                                             onChange={(e) => {
-
+                                                setLocationData({
+                                                    ...locationData,
+                                                    fromProvinceId: e.target.value
+                                                })
+                                                setFromCityDepartureSelectorValues([]);
+                                                GetCityData("from", e.target.value);
                                             }}>
                                         <option>{t("select")}</option>
-                                        {fromProvinceSelectorValues}
+                                        {fromProvinceDepartureSelectorValues}
                                     </select>
                                 </div>
                             </div>
@@ -263,68 +231,72 @@ export default function EditTrip() {
                                     <select name="fromCitySelector" id="fromCitySelector"
                                             className="form-select"
                                             required={true}
-                                            value={fromCityId}
+                                            value={locationData.fromCityId}
                                             onChange={(e) => {
-
+                                                setLocationData({
+                                                    ...locationData,
+                                                    fromCityId: e.target.value
+                                                })
+                                                storeCityData("from", e.target.value);
                                             }}>
                                         <option>{t("select")}</option>
-                                        {fromCitySelectorValues}
+                                        {fromCityDepartureSelectorValues}
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <br/>
-                        {/*<div id="toDestination">*/}
-                        {/*    <h4>To</h4>*/}
-                        {/*    <div className="row ">*/}
-                        {/*        <label htmlFor="fromCountrySelector"*/}
-                        {/*               className="col-sm-3 col-form-label">{t("country")}</label>*/}
-                        {/*        <div className="col">*/}
-                        {/*            <select name="fromCountrySelector" id="fromCountrySelector"*/}
-                        {/*                    className="form-select" required={true}*/}
-                        {/*                    value={toCountryId}*/}
-                        {/*                    onChange={(e) => {*/}
-                        
-                        {/*                    }}>*/}
-                        {/*                <option>{t("select")}</option>*/}
-                        {/*                {toCountrySelectorValues}*/}
-                        {/*            </select>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*    <div className="row ">*/}
-                        {/*        <label htmlFor="fromProvinceSelector"*/}
-                        {/*               className="col-sm-3 col-form-label">{t("provincestate")}</label>*/}
-                        {/*        <div className="col">*/}
-                        {/*            <select name="fromProvinceSelector"*/}
-                        {/*                    id="fromProvinceSelector"*/}
-                        {/*                    className="form-select"*/}
-                        {/*                    required={true}*/}
-                        {/*                    value={toProvinceId}*/}
-                        {/*                    onChange={(e) => {*/}
-                        
-                        {/*                    }}>*/}
-                        {/*                <option>{t("select")}</option>*/}
-                        {/*                {toProvinceSelectorValues}*/}
-                        {/*            </select>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*    <div className="row ">*/}
-                        {/*        <label htmlFor="fromCitySelector"*/}
-                        {/*               className="col-sm-3 col-form-label">{t("citySelector")}</label>*/}
-                        {/*        <div className="col">*/}
-                        {/*            <select name="fromCitySelector" id="fromCitySelector"*/}
-                        {/*                    className="form-select"*/}
-                        {/*                    required={true}*/}
-                        {/*                    value={toCityId}*/}
-                        {/*                    onChange={(e) => {*/}
-                        
-                        {/*                    }}>*/}
-                        {/*                <option>{t("select")}</option>*/}
-                        {/*                {toCitySelectorvalues}*/}
-                        {/*            </select>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
+                        <div id="toDestination">
+                            <h4>To</h4>
+                            <div className="row ">
+                                <label htmlFor="fromCountrySelector"
+                                       className="col-sm-3 col-form-label">{t("country")}</label>
+                                <div className="col">
+                                    <select name="fromCountrySelector" id="fromCountrySelector"
+                                            className="form-select" required={true}
+                                            value={locationData.toCountryId}
+                                            onChange={(e) => {
+
+                                            }}>
+                                        <option>{t("select")}</option>
+                                        {toCountryDepartureSelectorVales}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="row ">
+                                <label htmlFor="fromProvinceSelector"
+                                       className="col-sm-3 col-form-label">{t("provincestate")}</label>
+                                <div className="col">
+                                    <select name="fromProvinceSelector"
+                                            id="fromProvinceSelector"
+                                            className="form-select"
+                                            required={true}
+                                            value={locationData.toProvinceId}
+                                            onChange={(e) => {
+
+                                            }}>
+                                        <option>{t("select")}</option>
+                                        {toProvinceDepartureSelectorValues}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="row ">
+                                <label htmlFor="fromCitySelector"
+                                       className="col-sm-3 col-form-label">{t("citySelector")}</label>
+                                <div className="col">
+                                    <select name="fromCitySelector" id="fromCitySelector"
+                                            className="form-select"
+                                            required={true}
+                                            value={locationData.toCityId}
+                                            onChange={(e) => {
+
+                                            }}>
+                                        <option>{t("select")}</option>
+                                        {toCityDepartureSelectorValues}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <br/>
                         <div>
                             <div className="row">
@@ -333,9 +305,8 @@ export default function EditTrip() {
                                 <div className="col">
                                     <select name="passengers" id="passengers"
                                             className="form-select"
-                                            value={passengers}
+                                            value={locationData.passengers}
                                             onChange={(e) => {
-                                                setPassengers(e.target.value)
                                             }}>
                                         <option>{t("select")}</option>
                                         <option value={"1"}>1</option>
@@ -358,9 +329,9 @@ export default function EditTrip() {
                                        className="form-label">{t("description")}</label>
                                 <textarea className="form-control" id="TripDescription"
                                           rows="4"
-                                          value={description}
+                                          value={locationData.description}
                                           onChange={event => {
-                                              setDescription(event.target.value);
+
                                           }}></textarea>
                             </div>
                         </div>
@@ -370,8 +341,7 @@ export default function EditTrip() {
                                 <div className="col-sm-2">{t("departureDate")}</div>
                                 <div className="col">
                                     <DatePicker onChange={value => {
-                                        setDepartureDate(value)
-                                    }} value={departureDate}/>
+                                    }} value={locationData.departureDate}/>
                                 </div>
                             </div>
                         </div>
@@ -380,8 +350,9 @@ export default function EditTrip() {
                                 <div className="col-sm-2">{t("departureTime")}</div>
                                 <div className="col">
                                     <TimePicker disableClock={true}
-                                                onChange={setDepartureTime}
-                                                value={departureTime}
+                                                onChange={value => {
+                                                }}
+                                                value={locationData.departureTime}
                                     />
                                 </div>
                             </div>

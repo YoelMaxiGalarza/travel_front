@@ -14,7 +14,6 @@ export default function Login() {
     async function handleSubmitForm(event) {
         event.preventDefault()
         authenticationManager.login(username, password).then((result) => {
-
             if (result.status === 401) {
                 localStorage.clear()
                 router.push("/login")
