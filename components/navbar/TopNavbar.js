@@ -10,18 +10,12 @@ export default function TopNavbar({children}) {
     const router = useRouter();
     const http = HttpResourceFactory.create();
 
-    function handleLogout(event) {
-        event.preventDefault();
-        http.post("/logout", null, localStorage.getItem('Authorization'));
-        localStorage.clear();
-        router.push("/")
-    }
 
     return (
         <>
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
                 <div className="container-fluid">
-                    <Link className="navbar-brand" href="#">{t("title")}</Link>
+                    <Link className="navbar-brand" href="/">{t("title")}</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarSupportedContent"
                             aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -31,7 +25,10 @@ export default function TopNavbar({children}) {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            {children}
+                            <li><Link className="nav-link  " aria-current="page"
+                                      href="/login">{t("login.tag")}</Link></li>
+                            <li><Link className="nav-link " aria-current="page"
+                                      href="/signin">{t("signin")}</Link></li>
                         </ul>
                         <div className="d-flex">
 
@@ -39,7 +36,6 @@ export default function TopNavbar({children}) {
                     </div>
                 </div>
             </nav>
-            <br/>
         </>)
 }
 

@@ -1,11 +1,12 @@
-import TopNavbar from "../components/navbar/TopNavbar";
 import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
+import TopNavbar from "../components/navbar/TopNavbar";
 import Link from "next/link";
 
 
 export default function Index() {
-    const [t, i18n] = useTranslation("common");
+    const {t}= useTranslation("common");
+
     useEffect(() => {
 
     }, []);
@@ -16,39 +17,23 @@ export default function Index() {
             <li><Link className="nav-link " aria-current="page"
                       href="/signin">{t("signin")}</Link></li>
         </TopNavbar>
-        <div className="container">
+        {/*<div className="w-screen min-h-12 bg-blue-400 rounded-b place-content-center">*/}
+        {/*    <h1 >Test</h1>*/}
+        {/*</div>*/}
+        {/*<div className="min-h-screen place-content-center">*/}
+        {/*    <div*/}
+        {/*        className="bg-emerald-500 w-52 h-52 rounded-full shadow-2xl place-content-center">*/}
+        {/*        <div*/}
+        {/*            className="bg-blue-600 w-10 h-10 rounded-full shadow-2xl place-content-center">*/}
+        {/*            <div*/}
+        {/*                className="bg-red-600 w-20 h-20 rounded-full shadow-2xl place-content-center">*/}
 
-            <div id="carouselExampleInterval" className="carousel slide"
-                 data-bs-ride="carousel">
-                <div className="carousel-inner">
-                    <div className="carousel-item active" data-bs-interval="5000">
-                        <img src="/img/landscape_1.png" className="d-block w-100"
-                             alt="landscape_1"/>
-                        <div className="carousel-caption d-none d-md-block">
-                            <h5>First slide label</h5>
-                            <p>Some representative placeholder content for the first slide.</p>
-                        </div>
+        {/*            </div>*/}
+        {/*        </div>*/}
+        {/*    </div>*/}
+        {/*</div>*/}
 
-                    </div>
-                    <div className="carousel-item" data-bs-interval="5000">
-                        <img src="/img/landscape_2_buenosaires.png" className="d-block w-100"
-                             alt="landscape_2"/>
-                        <div className="carousel-caption d-none d-md-block">
-                            <h5>Second slide label</h5>
-                            <p>Some representative placeholder content for the first slide.</p>
-                        </div>
-                    </div>
-                    <div className="carousel-item" data-bs-interval="5000">
-                        <img src="/img/landscape_3_rosario.png" className="d-block w-100"
-                             alt="landscape_3"/>
-                        <div className="carousel-caption d-none d-md-block">
-                            <h5>Second slide label</h5>
-                            <p>Some representative placeholder content for the first slide.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </>)
 }
 

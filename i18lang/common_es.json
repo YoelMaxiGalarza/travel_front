@@ -1,11 +1,7 @@
 {
-  "title": "Travelling",
-  "welcome": {
-    "title": {
-      "company": "Bienvenido a {{company}}",
-      "user": "Bienvenido {{user}}"
-    }
-  },
+  "title": "Wonderlust",
+  "welcome": "Bienvenido",
+  "home": "Inicio",
   "about": "Sobre Nosotros",
   "contact": {
     "us": "Contacto",
@@ -22,6 +18,7 @@
     "password": "Contraseña"
   },
   "signin": "Registrar",
+  "register": "Registrarse",
   "logout": "Cerrar sesion",
   "base": {
     "settings": "Preferencias",
@@ -51,10 +48,16 @@
   "submit": {
     "trip": "Crear"
   },
-  "user": "Usuario",
   "trips": "Viajes",
   "location": "Ubicaciones",
+  "users": "Usuarios",
+  "create": "Crear",
+  "roles": "Roles",
+  "permissions": "Permisos",
+  "name": "Nombre",
+  "surname": "Apellido",
   "user": {
+    "user":"Usuario",
     "username": "Usuario",
     "name": "Nombre",
     "surname": "Apellido",
@@ -62,7 +65,9 @@
     "country": "País",
     "provincestate": "Provincia",
     "city": "Ciudad",
-    "isDriver": "Conductor"
+    "isDriver": "Conductor",
+    "role": "Rol",
+    "password": "Contraseña"
   },
   "error.user.already.exists": "El usuario ya existe",
   "error.user.not.found": "Usuario no encontrado"
