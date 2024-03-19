@@ -1,4 +1,4 @@
-import AdminNavbar from "../../../../components/navbar/AdminNavbar";
+import AdminSidebar from "../../../../components/navbar/AdminSidebar";
 import Footer from "../../../../components/core/footer";
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
@@ -38,7 +38,7 @@ export default function Create() {
         });
     }, [httpResource]);
     return (<>
-        <AdminNavbar/>
+        <AdminSidebar/>
         <div className="container ">
             <div className="row">
                 <div className="col"></div>

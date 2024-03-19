@@ -1,4 +1,4 @@
-import AdminNavbar from "../../../../components/navbar/AdminNavbar";
+import AdminSidebar from "../../../../components/navbar/AdminSidebar";
 import {useRouter, useSearchParams} from "next/navigation";
 import {useEffect, useState} from "react";
 import {HttpResourceFactory} from "../../../../components/core/factory/HttpResourceFactory";
@@ -76,7 +76,7 @@ export default function Edit() {
     }, []);
 
     return (<>
-        <AdminNavbar/>
+        <AdminSidebar/>
         <br/>
         <div className="container ">
             <div className="row">

@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import UserNavbar from "../../../../../components/navbar/UserNavbar";
 import {useTranslation} from "react-i18next";
 import {useRouter} from "next/navigation";
-import AdminNavbar from "../../../../../components/navbar/AdminNavbar";
+import AdminSidebar from "../../../../../components/navbar/AdminSidebar";
 import {useSearchParams} from "next/navigation";
 import {HttpResourceFactory} from "../../../../../components/core/factory/HttpResourceFactory";
 
@@ -47,7 +47,7 @@ export default function ViewRoles() {
         getRoleByRoleID()
     }, []);
     return (<>
-        <AdminNavbar/>
+        <AdminSidebar/>
         <h3 id="edit">Edit Role &quot{role.name}&quot</h3>
 
         <form href="#" className={"container"} onSubmit={editRole}>

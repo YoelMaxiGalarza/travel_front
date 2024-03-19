@@ -1,11 +1,11 @@
 import UserNavbar from "../../../../components/navbar/UserNavbar";
-import AdminNavbar from "../../../../components/navbar/AdminNavbar";
+import AdminSidebar from "../../../../components/navbar/AdminSidebar";
 
 export default function Country() {
     return (
         <>
             <UserNavbar>
-                <AdminNavbar></AdminNavbar>
+                <AdminSidebar></AdminSidebar>
             </UserNavbar>
             <div>
                 <h1>Country</h1>

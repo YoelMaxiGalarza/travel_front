@@ -42,7 +42,7 @@ export default function Sidebar() {
                 </Link>
                 <ul className="dropdown-menu text-small shadow">
 
-                    {/*<li><a className="dropdown-item" href="/user/settings">{t("settings")}</a></li>*/}
+                    <li><Link className="dropdown-item" href="/admin">{t("settings")}</Link></li>
                     <li><Link className="dropdown-item" href="/dashboard/profile">{t("profile")}</Link>
                     </li>
                     <li>

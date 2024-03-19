@@ -590,10 +590,6 @@ video {
   position: fixed;
 }
 
-.absolute {
-  position: absolute;
-}
-
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -725,7 +721,8 @@ video {
 }
 
 .blog-wrapper {
-  padding: 15px;
+  /*padding: 15px;*/
+  padding-left: 4.5rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -752,7 +749,7 @@ video {
 
 .blog-wrapper .blog-card .card-img {
   position: relative;
-  text-align: center;
+  text-align: left;
   background: #CB6074;
 }
 
@@ -776,14 +773,40 @@ video {
   border-right: solid 10px transparent;
 }
 
-.blog-wrapper .blog-card .card-img h1 {
+.blog-wrapper .blog-card .card-img .fromCity {
   position: absolute;
   margin: 0;
   font-size: 42px;
-  bottom: 15px;
+  bottom: 7rem;
   width: 100%;
   color: #fff;
   font-family: "Slabo 27px", serif;
+  text-shadow: #3C3C3C 1px 2px 2px;
+  text-indent: 2rem;
+}
+
+.blog-wrapper .blog-card .card-img .toCity{
+  position: absolute;
+  margin: 0;
+  font-size: 42px;
+  bottom: 2rem;
+  width: 100%;
+  color: #fff;
+  font-family: "Slabo 27px", serif;
+  text-shadow: #3C3C3C 1px 2px 2px;
+  text-indent: 2rem;
+}
+
+.blog-wrapper .blog-card .card-img .fromCity .location-dot-fromCity{
+  color: chartreuse;
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.blog-wrapper .blog-card .card-img .toCity .location-dot-toCity{
+  color: khaki;
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
 }
 
 .blog-wrapper .blog-card .card-details {

@@ -1,4 +1,4 @@
-import AdminNavbar from "../../../components/navbar/AdminNavbar";
+import AdminSidebar from "../../../components/navbar/AdminSidebar";
 import {HttpResourceFactory} from "../../../components/core/factory/HttpResourceFactory";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
@@ -35,7 +35,7 @@ export default function UserManagement() {
 
     return (
         <>
-            <AdminNavbar/>
+            <AdminSidebar/>
             <br/>
             <div className="container">
 

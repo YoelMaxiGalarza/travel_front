@@ -2,9 +2,8 @@ import {useRouter} from "next/navigation";
 
 export class HttpResourceFactory {
 
-
     constructor() {
-        this.baseUrl = "http://190.31.121.129:8080/api";
+        this.baseUrl = "http://localhost:8080/api";
         this.headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',

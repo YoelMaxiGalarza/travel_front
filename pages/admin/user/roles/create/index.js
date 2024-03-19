@@ -1,4 +1,4 @@
-import AdminNavbar from "../../../../../components/navbar/AdminNavbar";
+import AdminSidebar from "../../../../../components/navbar/AdminSidebar";
 import {useTranslation} from "react-i18next";
 import {HttpResourceFactory} from "../../../../../components/core/factory/HttpResourceFactory";
 import {useState} from "react";
@@ -20,7 +20,7 @@ export default function CreateRole() {
         router.push('/admin/user/roles')
     }
     return (<>
-            <AdminNavbar/>
+            <AdminSidebar/>
             <div>
                 <div className="col">
                     <h1>{t("createRole")}</h1>

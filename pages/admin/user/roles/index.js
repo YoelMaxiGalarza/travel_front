@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import {HttpResourceFactory} from "../../../../components/core/factory/HttpResourceFactory";
 import {useEffect, useState} from "react";
-import AdminNavbar from "../../../../components/navbar/AdminNavbar";
+import AdminSidebar from "../../../../components/navbar/AdminSidebar";
 import UserNavbar from "../../../../components/navbar/UserNavbar";
 import {useRouter} from "next/navigation";
 
@@ -42,7 +42,7 @@ export default function Roles() {
     }
 
     return (<>
-        <AdminNavbar/>
+        <AdminSidebar/>
 
         <div className="mb-3">
             <div className="row">
