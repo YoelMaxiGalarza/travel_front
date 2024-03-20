@@ -1,4 +1,3 @@
-import {useRouter} from "next/navigation";
 
 export class HttpResourceFactory {
 
@@ -32,6 +31,11 @@ export class HttpResourceFactory {
     put(endpoint, body, authorization) {
         this.headers['Authorization'] = authorization
         return this._doRequest(endpoint, "PUT", body, this.headers)
+    }
+
+    delete(endpoint, body, authorization) {
+        this.headers['Authorization'] = authorization
+        return this._doRequest(endpoint, "DELETE", body, this.headers)
     }
 
 }

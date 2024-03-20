@@ -1,23 +1,19 @@
 import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
-import TopNavbar from "../components/navbar/TopNavbar";
 import Link from "next/link";
 
 
 export default function Index() {
-    const {t}= useTranslation("common");
+    const {t} = useTranslation("common");
 
     useEffect(() => {
-
+        sessionStorage.clear();
     }, []);
     return (<>
-        <TopNavbar>
+        <ul>
             <li><Link className="nav-link  " aria-current="page"
                       href="/login">{t("login.tag")}</Link></li>
-            <li><Link className="nav-link " aria-current="page"
-                      href="/signin">{t("signin")}</Link></li>
-        </TopNavbar>
-
+        </ul>
 
 
     </>)

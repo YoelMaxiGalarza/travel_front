@@ -3,6 +3,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {useEffect, useState} from "react";
 import {HttpResourceFactory} from "../../../../components/core/factory/HttpResourceFactory";
 import {useTranslation} from "react-i18next";
+import Sidebar from "../../../../components/navbar/Sidebar";
 
 export default function Edit() {
     const params = useSearchParams()
@@ -11,7 +12,7 @@ export default function Edit() {
     const [t, i18n] = useTranslation("common");
     const http = HttpResourceFactory.create();
     const [roles, setRoles] = useState([{}]);
-    const [selectedRole, setSelectedRole] = useState(0);
+    const [selectedRole, setSelectedRole] = useState([{}]);
     const [error, setError] = useState({});
     const router = useRouter();
     const [data, setData] = useState({
@@ -76,7 +77,7 @@ export default function Edit() {
     }, []);
 
     return (<>
-        <AdminSidebar/>
+        <Sidebar />
         <br/>
         <div className="container ">
             <div className="row">

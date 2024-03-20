@@ -1,13 +1,17 @@
 import {useTranslation} from "react-i18next";
-import AdminSidebar from "../../components/navbar/AdminSidebar";
+import Sidebar from "../../components/navbar/Sidebar";
+import isAuth from "../../components/core/authentication/isAuth";
 
-export default function Admin() {
-    const [t, i18n] = useTranslation("common");
+const Admin = () => {
+
+    const {t} = useTranslation("common");
 
     return (<>
-       <AdminSidebar/>
-        <div>
+        <Sidebar/>
+        <div className={"blog-wrapper"}>
             <h1>Admin</h1>
         </div>
     </>)
 }
+
+export default Admin

@@ -1,15 +1,12 @@
-import {useEffect, useState} from "react";
-import UserNavbar from "../../../../../components/navbar/UserNavbar";
+import {useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useRouter} from "next/navigation";
-import AdminSidebar from "../../../../../components/navbar/AdminSidebar";
 import {useSearchParams} from "next/navigation";
-import {HttpResourceFactory} from "../../../../../components/core/factory/HttpResourceFactory";
+import {HttpResourceContext} from "../../../../components/core/context";
+import Sidebar from "../../../../components/navbar/Sidebar";
 
 export default function ViewRoles() {
     const [t, i18n] = useTranslation('common');
-    const router = useRouter();
-    const http = HttpResourceFactory.create();
+    const {http,router} = useContext(HttpResourceContext)
     const params = useSearchParams();
     const [role, setRole] = useState({})
     let roleId = params.get('roleId');
@@ -47,7 +44,7 @@ export default function ViewRoles() {
         getRoleByRoleID()
     }, []);
     return (<>
-        <AdminSidebar/>
+        <Sidebar/>
         <h3 id="edit">Edit Role &quot{role.name}&quot</h3>
 
         <form href="#" className={"container"} onSubmit={editRole}>

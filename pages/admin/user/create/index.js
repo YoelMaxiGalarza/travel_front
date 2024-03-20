@@ -4,6 +4,7 @@ import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {HttpResourceFactory} from "../../../../components/core/factory/HttpResourceFactory";
+import Sidebar from "../../../../components/navbar/Sidebar";
 
 export default function Create() {
     const [t, i18n] = useTranslation("common");
@@ -38,7 +39,7 @@ export default function Create() {
         });
     }, [httpResource]);
     return (<>
-        <AdminSidebar/>
+        <Sidebar/>
         <div className="container ">
             <div className="row">
                 <div className="col"></div>

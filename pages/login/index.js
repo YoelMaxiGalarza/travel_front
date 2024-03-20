@@ -1,38 +1,52 @@
-import {useState} from 'react';
-import {useRouter} from 'next/navigation'
+import {useContext, useState} from 'react';
 import {useTranslation} from "react-i18next";
-import {
-    AuthenticationManager
-} from "../../components/core/authentication/AuthenticationManager";
+import {HttpResourceContext} from "../../components/core/context";
+
 
 export default function Login() {
 
-    const [t, i18n] = useTranslation("common");
-    const authenticationManager = AuthenticationManager.create();
-    const router = useRouter()
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
-    const [register, setRegister] = useState(true)
-    const [login, setLogin] = useState(false)
+    const {t} = useTranslation("common");
+    const [registerView, setRegisterView] = useState(true);
+    const [loginView, setLoginView] = useState(false);
     const [registerData, setRegisterData] = useState({
         name: "", surname: "", username: "", email: "", password: "", password2: ""
-    })
+    });
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const [error, setError] = useState({error: false, errorMessage: ""});
+
+    const {router, auth} = useContext(HttpResourceContext);
 
     async function handleSubmitForm(event) {
         event.preventDefault()
-        await authenticationManager.login(username, password).then((result) => {
-            if (result.status === 200) {
-                result.json().then((data) => {
-                    localStorage.setItem('Authorization', 'Basic ' + data.base64EncodedAuthenticationKey)
-                    localStorage.setItem('Username', data.username)
-                    router.push("/dashboard")
-                });
-            } else {
+        const request = await auth.login(username, password);
+        try {
+            const response = await request.json();
+            if (request.status === 200) {
+                let {username, roles, email, isDriver} = response.user;
+                let permissions = []
+                roles.forEach(role => {
+                    role.permissions.forEach(permission => {
+                        permissions.push(permission)
+                    })
+                })
+                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('roles', JSON.stringify(roles));
+                sessionStorage.setItem('email', email);
+                sessionStorage.setItem('isDriver', isDriver);
+                sessionStorage.setItem('permissions', JSON.stringify(permissions))
+                sessionStorage.setItem('Authorization', 'Basic ' + response.base64EncodedAuthenticationKey)
+                router.push("/admin")
+            } else if (request.status === 401) {
                 localStorage.clear()
-                router.push("/login")
+                setError({error: true, errorMessage: t("unauthorized")});
             }
-        });
+        } catch (e) {
+            console.error(e)
+        }
     }
+
 
     function handleChange() {
         setRegisterData({
@@ -40,17 +54,17 @@ export default function Login() {
         })
         setUsername("")
         setPassword("")
-        setRegister(!register)
-        setLogin(!login)
+        setRegisterView(!registerView)
+        setLoginView(!loginView)
     }
 
-    function registerUser(event) {
+    async function registerUser(event) {
         event.preventDefault()
         if (registerData.password === registerData.password2) {
 
-            authenticationManager.register(registerData).then((result) => {
+            await auth.register(registerData).then((result) => {
                 if (result.status === 200) {
-                    alert(t("userRegistered"))
+                    alert(t("userAlreadyExists"))
                     handleChange()
                 } else {
                     alert(t("userNotRegistered"))
@@ -63,7 +77,7 @@ export default function Login() {
 
     return (<>
         <br/>
-        <div className="login" hidden={login}>
+        <div className="login" hidden={loginView}>
             <form id='loginform' className="card container" onSubmit={handleSubmitForm}>
                 <div className="card-body">
                     <div className="mb-3">
@@ -94,11 +108,12 @@ export default function Login() {
                 </div>
             </form>
         </div>
-        <div className="register" hidden={register}>
+        <div className="register" hidden={registerView}>
             <form className="container card " onSubmit={registerUser}>
                 <div className="card-body">
                     <div className="mb-3">
-                        <h6 htmlFor="nameInput" className="form-label">{t("nameInput")}</h6>
+                        <h6 htmlFor="nameInput"
+                            className="form-label">{t("nameInput")}</h6>
                         <input type="text" className="form-control"
                                id="nameInput" onChange={event => {
                             setRegisterData({...registerData, name: event.target.value})
@@ -130,7 +145,8 @@ export default function Login() {
                     </div>
 
                     <div className="mb-3">
-                        <h6 htmlFor="emailInput" className="form-label">{t("emailInput")}</h6>
+                        <h6 htmlFor="emailInput"
+                            className="form-label">{t("emailInput")}</h6>
                         <input type="email" className="form-control"
                                id="emailInput"
                                onChange={event => {
@@ -177,5 +193,4 @@ export default function Login() {
         </div>
     </>)
 }
-
 

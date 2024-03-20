@@ -1,9 +1,8 @@
 import {useTranslation} from "react-i18next";
-import {HttpResourceFactory} from "../../../../components/core/factory/HttpResourceFactory";
+import {HttpResourceFactory} from "../../../components/core/factory/HttpResourceFactory";
 import {useEffect, useState} from "react";
-import AdminSidebar from "../../../../components/navbar/AdminSidebar";
-import UserNavbar from "../../../../components/navbar/UserNavbar";
 import {useRouter} from "next/navigation";
+import Sidebar from "../../../components/navbar/Sidebar";
 
 /**
  *
@@ -21,18 +20,19 @@ export default function Roles() {
 
     async function getAllRoles() {
         setRoles([{}])
-        const response = await httpResource.get("/roles", localStorage.getItem('Authorization'));
+        const response = await httpResource.get("/roles", sessionStorage.getItem('Authorization'));
         const roles = await response.json();
         setRoles(roles);
     }
 
     useEffect(() => {
         getAllRoles();
+
     }, []);
 
     async function handleEditRole(roleId) {
         router.push({
-            pathname: '/admin/user/roles/view', query: {roleId: roleId}
+            pathname: '/admin/roles/view', query: {roleId: roleId}
         })
     }
 
@@ -42,9 +42,9 @@ export default function Roles() {
     }
 
     return (<>
-        <AdminSidebar/>
+        <Sidebar />
 
-        <div className="mb-3">
+        <div className="blog-wrapper mb-3">
             <div className="row">
                 <h1>Roles</h1>
                 <div className="col-sm-1"></div>
@@ -82,7 +82,7 @@ export default function Roles() {
                                         <td>
                                             <button className="btn btn-danger "
                                                     onClick={event => removeRole(role.id)}>
-                                                <i className="fa-solid fa-trash">{t("delete")}</i>
+                                                <i className="fa-solid fa-trash">{}</i>
                                             </button>
                                         </td>
                                     </tr>
@@ -94,7 +94,7 @@ export default function Roles() {
                 </div>
                 <div className="col-sm-1">
                     <button type="button" className="btn btn-primary" onClick={event => {
-                        router.push("/admin/user/roles/create")
+                        router.push("/admin/roles/create")
                     }}>Add Role
                     </button>
                 </div>

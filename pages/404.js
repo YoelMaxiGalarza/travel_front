@@ -1,11 +1,10 @@
-import TopNavbar from "../components/navbar/TopNavbar";
-import Footer from "../components/core/footer";
+import Sidebar from "../components/navbar/Sidebar";
 
 export default function error404() {
 
     return (
         <>
-            <TopNavbar></TopNavbar>
+        <Sidebar />
             <div className="non-navbar-content">
                 <div className="container-fluid">
                     <div className="row">
@@ -19,7 +18,6 @@ export default function error404() {
                     </div>
                 </div>
             </div>
-            <Footer></Footer>
         </>
     )
 }

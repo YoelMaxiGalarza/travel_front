@@ -1,13 +1,12 @@
-import {HttpResourceFactory} from "../factory/HttpResourceFactory";
+import {HttpResourceFactory} from "./HttpResourceFactory";
 
-export class AuthenticationManager {
-    constructor() {
-        this.isAuthenticated = false;
-        this.http = HttpResourceFactory.create()
+export class HttpAuthenticationResourceFactory {
+    constructor(http) {
+        this.http = http;
     }
 
-    static create() {
-        return new AuthenticationManager();
+    static create(http) {
+        return new HttpAuthenticationResourceFactory(http);
     }
 
     async login(username, password) {
@@ -34,4 +33,5 @@ export class AuthenticationManager {
             }
         })
     }
+
 }
