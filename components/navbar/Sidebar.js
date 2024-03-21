@@ -12,7 +12,7 @@ export default function Sidebar() {
         let roles = JSON.parse(localStorage.getItem('roles'));
         roles.forEach(role => {
             if (role.name == "ROLE_ADMIN") {
-                setAdminSidebar( <AdminSidebar />)
+                setAdminSidebar(<AdminSidebar/>)
             }
         })
     }, []);
@@ -40,7 +40,7 @@ export default function Sidebar() {
                 </li>
                 <li>
                     <Link href="/dashboard/trips"
-                          className="nav-link p3 border-bottom rounded-0"
+                          className="nav-link p3  rounded-0"
                           data-bs-toggle="tooltip" data-bs-placement="right"
                           aria-label="trips" data-bs-original-title="Dashboard">
                         <i className="fa-solid fa-car-side"></i>
@@ -50,26 +50,33 @@ export default function Sidebar() {
             <div className="dropdown border-top" bis_skin_checked="1">
 
                 {/*ADMIN*/}
-                {adminSidebar}
-
-                <Link href="#"
-                      className="d-flex align-items-center justify-content-center p-3 link-body-emphasis text-decoration-none dropdown-toggle"
-                      data-bs-toggle="dropdown" aria-expanded="false">
-                    <Image src={"/img/favicon.ico"} alt={"..."} width={24} height={24}/>
-                </Link>
-                <ul className="dropdown-menu text-small shadow">
-
-                    <li><Link className="dropdown-item" href="/admin">{t("settings")}</Link>
-                    </li>
-                    <li><Link className="dropdown-item"
-                              href="/dashboard/profile">{t("profile")}</Link>
-                    </li>
-                    <li>
-                        <hr className="dropdown-divider"/>
-                    </li>
-                    <li><Link className="dropdown-item" href="/logout">{t("logout")}</Link>
-                    </li>
+                <ul className="nav nav-pills nav-flush flex-column mb-auto text-center">
+                    {adminSidebar}
                 </ul>
+
+
+
+                <div className="btn-group dropend">
+                    <Link href="#"
+                          className="d-flex align-items-center  justify-content-center p-4 link-body-emphasis text-decoration-none dropdown-toggle"
+                          data-bs-toggle="dropdown" aria-expanded="false">
+                        <Image src={"/img/favicon.ico"} alt={"..."} width={24} height={24}/>
+                    </Link>
+                    <ul className="dropdown-menu text-small shadow">
+
+                        <li><Link className="dropdown-item"
+                                  href="/admin">{t("settings")}</Link>
+                        </li>
+                        <li><Link className="dropdown-item"
+                                  href="/dashboard/profile">{t("profile")}</Link>
+                        </li>
+                        <li>
+                            <hr className="dropdown-divider"/>
+                        </li>
+                        <li><Link className="dropdown-item" href="/logout">{t("logout")}</Link>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </>)

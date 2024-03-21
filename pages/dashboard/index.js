@@ -1,47 +1,51 @@
 import {useTranslation} from "react-i18next";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {HttpResourceFactory} from "../../components/core/resourcefactory/HttpResourceFactory";
 import Sidebar from "../../components/navbar/Sidebar";
 import {useRouter} from "next/navigation";
+import {HttpResourceContext} from "../../components/core/context/CustomContext";
+import TripResourceFactory from "../../components/core/resourcefactory/TripResourceFactory";
 
 
 export default function Dashboard() {
-    const [t, i18n] = useTranslation("common");
-    const http = HttpResourceFactory.create();
+    const {http, router} = useContext(HttpResourceContext);
+    const {t} = useTranslation("common");
+
+    const tripResource = TripResourceFactory.create(http);
     const [trips, setTrips] = useState([]);
-    const router = useRouter();
 
     async function getTrips() {
-        const request = await http.get("/trip/getAll", localStorage.getItem('Authorization'));
+        let auth = localStorage.getItem('Authorization');
+        const request = await tripResource.getAllTrips(auth);
         let response = [];
         response = await request.json();
         setTrips(response.map(value => {
             let date = new Date(value.departureDate);
-            return <div className="blog-card" key={value.id}>
-                <div className="card-img">
-                    <img src="/img/cards/route-612x612.jpg"/>
-                    <h1 className={"fromCity"}><i
-                        className="fa-solid fa-location-dot location-dot-fromCity"></i>{value.fromProvince.name}
-                    </h1>
-                    <h1 className={"toCity"}><i
-                        className="fa-solid fa-location-dot location-dot-toCity"></i>{value.toProvince.name}
-                    </h1>
-                </div>
-                <div className="card-details">
+            return (
+                <div className="blog-card" key={value.id}>
+                    <div className="card-img">
+                        <img src="/img/cards/route-612x612.jpg"/>
+                        <h1 className={"fromCity"}><i
+                            className="fa-solid fa-location-dot location-dot-fromCity"></i>{value.fromProvince.name}
+                        </h1>
+                        <h1 className={"toCity"}><i
+                            className="fa-solid fa-location-dot location-dot-toCity"></i>{value.toProvince.name}
+                        </h1>
+                    </div>
+                    <div className="card-details">
                     <span><i
                         className="fa fa-calendar"></i>{date.getDate()}/{date.getMonth()}/{date.getFullYear()}</span>
-                    <span><i className="fa fa-clock"></i>{value.departureTime}</span>
-                    <span><i className="fa fa-heart"></i>{value.likes}</span>
-                </div>
-                <div className="card-text"><p>{value.description}</p></div>
-                <div className="btn read-more" onClick={event => {
-                    event.preventDefault();
-                    router.push({
-                        pathname: '/dashboard/trips/view',
-                        query: {tripId: value.id},
-                    })
-                }}>{t("join")}</div>
-            </div>
+                        <span><i className="fa fa-clock"></i>{value.departureTime}</span>
+                        <span><i className="fa fa-heart"></i>{value.likes}</span>
+                    </div>
+                    <div className="card-text"><p>{value.description}</p></div>
+                    <div className="btn read-more" onClick={event => {
+                        event.preventDefault();
+                        router.push({
+                            pathname: '/dashboard/trips/view', query: {tripId: value.id},
+                        })
+                    }}>{t("join")}</div>
+                </div>)
 
         }));
     }

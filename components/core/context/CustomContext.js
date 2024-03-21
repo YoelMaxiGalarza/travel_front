@@ -1,4 +1,4 @@
-import {createContext, useContext, useRef} from "react";
+import {createContext} from "react";
 import data from "../resource/data.json";
 
 export const InitDataContext = createContext(data);

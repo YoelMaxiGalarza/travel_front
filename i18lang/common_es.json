@@ -45,9 +45,7 @@
   "departureDate": "Fecha Ida",
   "returnDate": "Vuelta",
   "passengers": "Pasajeros",
-  "submit": {
-    "trip": "Crear"
-  },
+  "submit": "Submit",
   "trips": "Viajes",
   "location": "Ubicaciones",
   "users": "Usuarios",

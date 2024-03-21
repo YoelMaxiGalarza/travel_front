@@ -1,6 +1,6 @@
 import Head from "next/head";
 import {useContext} from "react";
-import {InitDataContext} from "../context";
+import {InitDataContext} from "../context/CustomContext";
 
 
 export default function CustomHead() {

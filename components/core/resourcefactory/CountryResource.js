@@ -1,11 +1,13 @@
-export class CountryResourceFactory {
+import {HttpResourceFactory} from "./HttpResourceFactory";
+
+export class CountryResource {
 
     constructor(http) {
         this.http = http;
     }
 
     static create(http) {
-        return new CountryResourceFactory(http);
+        return new CountryResource(http);
     }
 
     async getAllCountries(auth) {
@@ -24,9 +26,12 @@ export class CountryResourceFactory {
         return await this.http.delete("/country/delete?countryId=" + countryId, null, auth);
     }
 
-    async updateCountry(http, body, auth) {
+    async updateCountry(body, auth) {
         return await this.http.put("/country/update", body, auth)
     }
 
 
+    async searchCountry(value, auth) {
+        return await this.http.get("/country/search?pattern="+value,auth)
+    }
 }

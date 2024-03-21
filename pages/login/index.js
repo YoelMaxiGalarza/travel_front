@@ -1,6 +1,6 @@
 import {useContext, useState} from 'react';
 import {useTranslation} from "react-i18next";
-import {HttpResourceContext} from "../../components/core/context";
+import {HttpResourceContext} from "../../components/core/context/CustomContext";
 
 
 export default function Login() {

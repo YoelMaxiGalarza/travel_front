@@ -1,10 +1,9 @@
-import Sidebar from "../../../../components/navbar/Sidebar";
+import Sidebar from "../../../../../components/navbar/Sidebar";
 import {useTranslation} from "react-i18next";
 import {useContext, useState} from "react";
-import {HttpResourceContext} from "../../../../components/core/context";
-import {
-    CountryResourceFactory
-} from "../../../../components/core/resourcefactory/CountryResourceFactory";
+import {HttpResourceContext} from "../../../../../components/core/context/CustomContext";
+import {CountryResource} from "../../../../../components/core/resourcefactory/CountryResource";
+
 
 export default function CreateCountry() {
     const {t} = useTranslation("common")
@@ -17,7 +16,7 @@ export default function CreateCountry() {
         phoneCode: 0
     })
     const {http, router} = useContext(HttpResourceContext);
-    const countryResource = CountryResourceFactory.create(http);
+    const countryResource = CountryResource.create(http);
 
     async function submitForm(event) {
         event.preventDefault();
@@ -33,10 +32,9 @@ export default function CreateCountry() {
             numCode: null,
             phoneCode: null
         })
-        router.push("/admin/country")
+        router.push("/admin/world/country")
     }
 
-    // (1, 'AF', 'AFGHANISTAN', 'Afghanistan', 'AFG', 4, 93),
     return (<>
         <Sidebar/>
         <br/>
