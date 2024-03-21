@@ -37,7 +37,7 @@ export default function Login() {
                 sessionStorage.setItem('isDriver', isDriver);
                 sessionStorage.setItem('permissions', JSON.stringify(permissions))
                 sessionStorage.setItem('Authorization', 'Basic ' + response.base64EncodedAuthenticationKey)
-                router.push("/admin")
+                router.push("/dashboard")
             } else if (request.status === 401) {
                 localStorage.clear()
                 setError({error: true, errorMessage: t("unauthorized")});

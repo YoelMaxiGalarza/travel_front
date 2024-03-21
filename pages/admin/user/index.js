@@ -1,4 +1,4 @@
-import {HttpResourceFactory} from "../../../components/core/factory/HttpResourceFactory";
+import {HttpResourceFactory} from "../../../components/core/resourcefactory/HttpResourceFactory";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";

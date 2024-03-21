@@ -11,13 +11,13 @@ import CustomHead from "../components/core/head/CustomHead";
 import {AppResourceContext, HttpResourceContext} from "../components/core/context";
 import {useRouter} from "next/navigation";
 import {useEffect} from "react";
-import {HttpResourceFactory} from "../components/core/factory/HttpResourceFactory";
+import {HttpResourceFactory} from "../components/core/resourcefactory/HttpResourceFactory";
 import {
     HttpAuthenticationResourceFactory
-} from "../components/core/factory/HttpAuthenticationResourceFactory";
-import {CountryResourceFactory} from "../components/core/factory/CountryResourceFactory";
-import PermissionResourceFactory from "../components/core/factory/PermissionResourceFactory";
-import RoleResourceFactory from "../components/core/factory/RoleResourceFactory";
+} from "../components/core/resourcefactory/HttpAuthenticationResourceFactory";
+import {CountryResourceFactory} from "../components/core/resourcefactory/CountryResourceFactory";
+import PermissionResourceFactory from "../components/core/resourcefactory/PermissionResourceFactory";
+import RoleResourceFactory from "../components/core/resourcefactory/RoleResourceFactory";
 
 
 function MyApp({Component, pageProps}) {

@@ -3,7 +3,7 @@ import Footer from "../../../../components/core/footer";
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
-import {HttpResourceFactory} from "../../../../components/core/factory/HttpResourceFactory";
+import {HttpResourceFactory} from "../../../../components/core/resourcefactory/HttpResourceFactory";
 import Sidebar from "../../../../components/navbar/Sidebar";
 
 export default function Create() {

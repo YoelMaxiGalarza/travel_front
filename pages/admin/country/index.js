@@ -2,7 +2,7 @@ import Sidebar from "../../../components/navbar/Sidebar";
 import {useContext, useEffect, useState} from "react";
 import {AppResourceContext, HttpResourceContext} from "../../../components/core/context";
 import {useTranslation} from "react-i18next";
-import {CountryResourceFactory} from "../../../components/core/factory/CountryResourceFactory";
+import {CountryResourceFactory} from "../../../components/core/resourcefactory/CountryResourceFactory";
 
 export default function Country() {
 

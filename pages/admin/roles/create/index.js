@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {HttpResourceFactory} from "../../../../components/core/factory/HttpResourceFactory";
+import {HttpResourceFactory} from "../../../../components/core/resourcefactory/HttpResourceFactory";
 import {useContext, useState} from "react";
 import {useRouter} from "next/navigation";
 import Sidebar from "../../../../components/navbar/Sidebar";
