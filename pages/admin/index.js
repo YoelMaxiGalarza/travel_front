@@ -1,6 +1,5 @@
 import {useTranslation} from "react-i18next";
 import Sidebar from "../../components/navbar/Sidebar";
-import isAuth from "../../components/core/authentication/isAuth";
 
 const Admin = () => {
 

@@ -31,12 +31,12 @@ export default function Login() {
                         permissions.push(permission)
                     })
                 })
-                sessionStorage.setItem('username', username);
-                sessionStorage.setItem('roles', JSON.stringify(roles));
-                sessionStorage.setItem('email', email);
-                sessionStorage.setItem('isDriver', isDriver);
-                sessionStorage.setItem('permissions', JSON.stringify(permissions))
-                sessionStorage.setItem('Authorization', 'Basic ' + response.base64EncodedAuthenticationKey)
+                localStorage.setItem('username', username);
+                localStorage.setItem('roles', JSON.stringify(roles));
+                localStorage.setItem('email', email);
+                localStorage.setItem('isDriver', isDriver);
+                localStorage.setItem('permissions', JSON.stringify(permissions))
+                localStorage.setItem('Authorization', 'Basic ' + response.base64EncodedAuthenticationKey)
                 router.push("/dashboard")
             } else if (request.status === 401) {
                 localStorage.clear()

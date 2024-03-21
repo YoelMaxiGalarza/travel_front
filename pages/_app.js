@@ -8,16 +8,13 @@ import common_en from "../i18lang/common_en.json";
 import common_es from "../i18lang/common_es.json";
 import Footer from "../components/core/footer";
 import CustomHead from "../components/core/head/CustomHead";
-import {AppResourceContext, HttpResourceContext} from "../components/core/context";
+import {HttpResourceContext} from "../components/core/context/CustomContext";
 import {useRouter} from "next/navigation";
 import {useEffect} from "react";
 import {HttpResourceFactory} from "../components/core/resourcefactory/HttpResourceFactory";
 import {
     HttpAuthenticationResourceFactory
 } from "../components/core/resourcefactory/HttpAuthenticationResourceFactory";
-import {CountryResourceFactory} from "../components/core/resourcefactory/CountryResourceFactory";
-import PermissionResourceFactory from "../components/core/resourcefactory/PermissionResourceFactory";
-import RoleResourceFactory from "../components/core/resourcefactory/RoleResourceFactory";
 
 
 function MyApp({Component, pageProps}) {
@@ -49,15 +46,9 @@ function MyApp({Component, pageProps}) {
                 auth: HttpAuthenticationResourceFactory.create(http),
 
             }}>
-                <AppResourceContext.Provider value={{
-                    countryResource: CountryResourceFactory.create(http),
-                    permissionsResource: PermissionResourceFactory.create(http),
-                    roleResource: RoleResourceFactory.create(http)
-                }}>
-                    <CustomHead/>
-                    <Component {...pageProps}/>
-                    <Footer/>
-                </AppResourceContext.Provider>
+                <CustomHead/>
+                <Component {...pageProps}/>
+                <Footer/>
             </HttpResourceContext.Provider>
         </I18nextProvider>
 

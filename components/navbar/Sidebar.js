@@ -9,7 +9,7 @@ export default function Sidebar() {
     const [t, i18n] = useTranslation('common');
     const [adminSidebar, setAdminSidebar] = useState(<></>)
     useEffect(() => {
-        let roles = JSON.parse(sessionStorage.getItem('roles'));
+        let roles = JSON.parse(localStorage.getItem('roles'));
         roles.forEach(role => {
             if (role.name == "ROLE_ADMIN") {
                 setAdminSidebar( <AdminSidebar />)
