@@ -42,9 +42,14 @@ export default function EditCountry(){
     useEffect(() => {
         countryResource.getById(params.get("countryId"),localStorage.getItem('Authorization'))
             .then(value => {
-                value.json().then((response) => {
-                    setCountry(response)
-                })
+                if(value.status == 200){
+                    value.json().then((response) => {
+                        setCountry(response)
+                    })
+                }else{
+                    router.push("/admin/world/country")
+                }
+
             })
 
     }, []);
