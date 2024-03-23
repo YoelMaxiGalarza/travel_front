@@ -6,6 +6,7 @@ import {
     CountryResource
 } from "../../../../components/core/resourcefactory/CountryResource";
 import {HttpResourceContext} from "../../../../components/core/context/CustomContext";
+import UserManagementNavbar from "../../../../components/navbar/UserManagementNavbar";
 
 export default function Country() {
 
@@ -55,19 +56,26 @@ export default function Country() {
 
     return (<>
         <Sidebar/>
+        <br/>
+        <UserManagementNavbar />
         <div className="blog-wrapper">
             <div className="card">
                 <div className="card-body">
-                    <form className="d-flex" role="search">
-                        <input className="form-control me-2" type="search"
-                               placeholder="Search"
-                               aria-label="Search" onChange={searchCoutry}/>
-                        <button className="btn btn-primary" onClick={event => {
-                            event.preventDefault()
-                            router.push({pathname: "/admin/world/country/create"})
-                        }}>Crear
-                        </button>
-                    </form>
+                    <ul className="nav">
+                        <li className="d-flex">
+                            <input className="form-control me-2" type="search"
+                                   placeholder="Search"
+                                   aria-label="Search" onChange={searchCoutry}/>
+                        </li>
+                        <li className="nav-item">
+                            <button className="btn btn-primary" onClick={event => {
+                                event.preventDefault()
+                                router.push({pathname: "/admin/world/country/create"})
+                            }}>Crear
+                            </button>
+                        </li>
+                    </ul>
+
 
                     <table className="table table-striped">
                         <thead>

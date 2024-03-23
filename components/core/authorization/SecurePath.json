@@ -1,0 +1,33 @@
+{
+  "path": [{
+    "role": "ROLE_ADMIN",
+    "path": [
+      "/admin",
+      "/admin/roles",
+      "/admin/roles/create",
+      "/admin/roles/edit",
+      "/admin/user",
+      "/admin/user/create",
+      "/admin/user/edit",
+      "/admin/world",
+      "/admin/world/country",
+      "/admin/world/country/create",
+      "/admin/world/country/edit",
+      "/admin/world/city",
+      "/admin/world/city/create",
+      "/admin/world/city/edit",
+      "/admin/world/province",
+      "/admin/world/province/create",
+      "/admin/world/province/edit",
+      "/admin/world/trip",
+      "/admin/world/trip/create",
+      "/admin/world/trip/edit"
+    ]
+  },
+    {
+      "role": "ROLE_USER",
+      "path": [
+        "/dashboard"
+      ]
+    }]
+}

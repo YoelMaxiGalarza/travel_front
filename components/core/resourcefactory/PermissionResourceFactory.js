@@ -1,4 +1,3 @@
-import {HttpResourceFactory} from "./HttpResourceFactory";
 export default class PermissionResourceFactory{
 
     constructor(http) {
@@ -12,6 +11,9 @@ export default class PermissionResourceFactory{
     async getAllPermissions(auth) {
         return await this.http.get("/permission/getAll", auth)
     }
+    async createPermission(body,auth){
+        return await this.http.post("/permission/create", body, auth)
+    }
 
     async getPermissionById(permissionId,auth) {
         return await this.http.get("/permission?permissionId="+permissionId,auth)
@@ -20,9 +22,6 @@ export default class PermissionResourceFactory{
         return await this.http.delete("/permission/delete?permissionId=" + permissionId, null);
     }
 
-    async createPermission(body,auth){
-        return await this.http.post("/permission/create", body, auth)
-    }
 
     async updatePermission(http, body,auth){
         return await this.http.put("/permission/update", body, auth)

@@ -1,9 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 .blog-wrapper {
-    /*padding: 15px;*/
     padding-left: 4.5rem;
     display: flex;
     flex-direction: row;

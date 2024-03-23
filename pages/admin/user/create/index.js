@@ -1,16 +1,19 @@
 import AdminSidebar from "../../../../components/navbar/AdminSidebar";
 import Footer from "../../../../components/core/footer";
 import {useTranslation} from "react-i18next";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {HttpResourceFactory} from "../../../../components/core/resourcefactory/HttpResourceFactory";
 import Sidebar from "../../../../components/navbar/Sidebar";
+import {HttpResourceContext} from "../../../../components/core/context/CustomContext";
+import RoleResourceFactory
+    from "../../../../components/core/resourcefactory/RoleResourceFactory";
 
 export default function Create() {
     const [t, i18n] = useTranslation("common");
     const [data, setData] = useState({});
-    const httpResource = HttpResourceFactory.create();
-    const router = useRouter();
+    const {http, router } = useContext(HttpResourceContext)
+    const roleResource = RoleResourceFactory.create(http);
     const [roles, setRoles] = useState([{}]);
     const [error, setError] = useState({});
 
@@ -18,7 +21,7 @@ export default function Create() {
         event.preventDefault();
 
         console.log(data)
-        await httpResource.post("/user/create", JSON.stringify(data), localStorage.getItem('Authorization')).then(value => {
+        await http.post("/user/create", JSON.stringify(data), localStorage.getItem('Authorization')).then(value => {
             if (value.status === 200) {
                 router.push("/admin/user")
             } else {
@@ -32,12 +35,12 @@ export default function Create() {
     }
 
     useEffect(() => {
-        httpResource.get("/roles", localStorage.getItem('Authorization')).then(value => {
+        roleResource.getAllRoles(localStorage.getItem('Authorization')).then(value => {
             value.json().then(value => {
                 setRoles(value)
             });
         });
-    }, [httpResource]);
+    }, []);
     return (<>
         <Sidebar/>
         <div className="container ">

@@ -11,10 +11,12 @@ export default function Sidebar() {
     useEffect(() => {
         let roles = JSON.parse(localStorage.getItem('roles'));
         roles.forEach(role => {
+            console.log(role)
             if (role.name == "ROLE_ADMIN") {
                 setAdminSidebar(<AdminSidebar/>)
             }
         })
+
     }, []);
 
     return (<>

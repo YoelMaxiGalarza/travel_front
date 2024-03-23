@@ -1,7 +1,7 @@
 /**
  * App
  */
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {useEffect} from "react";
 import Footer from "../components/core/footer";
 import CustomHead from "../components/core/head";
@@ -20,6 +20,7 @@ import {HttpAuthenticationResourceFactory}
 function MyApp({Component, pageProps}) {
 
     const router = useRouter();
+    const path = usePathname();
     const http = HttpResourceFactory.create();
 
     i18next
@@ -36,6 +37,7 @@ function MyApp({Component, pageProps}) {
         });
     useEffect(() => {
 
+        console.log(path)
     }, []);
 
     return (<>

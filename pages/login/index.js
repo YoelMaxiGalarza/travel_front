@@ -9,7 +9,7 @@ export default function Login() {
     const [registerView, setRegisterView] = useState(true);
     const [loginView, setLoginView] = useState(false);
     const [registerData, setRegisterData] = useState({
-        name: "", surname: "", username: "", email: "", password: "", password2: ""
+        name: "rockstonebb", surname: "rockstonebb", username: "rockstonebb", email: "saaimonsg@gmail.com", password: "123456", password2: "123456"
     });
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -50,7 +50,7 @@ export default function Login() {
 
     function handleChange() {
         setRegisterData({
-            name: "", surname: "", username: "", email: "", password: "", password2: ""
+            name: "rockstonebb", surname: "rockstonebb", username: "rockstonebb", email: "saaimonsg@gmail.com", password: "123456", password2: "123456"
         })
         setUsername("")
         setPassword("")
@@ -61,15 +61,17 @@ export default function Login() {
     async function registerUser(event) {
         event.preventDefault()
         if (registerData.password === registerData.password2) {
-
-            await auth.register(registerData).then((result) => {
-                if (result.status === 200) {
-                    alert(t("userAlreadyExists"))
-                    handleChange()
-                } else {
-                    alert(t("userNotRegistered"))
-                }
-            });
+            if (registerData.username != "" && registerData.password != "" && registerData.email != "" && registerData.name != "" && registerData.surname != "") {
+                await auth.register(registerData).then((result) => {
+                    if (result.status === 200) {
+                        handleChange()
+                    } else {
+                        alert(t("userNotRegistered"))
+                    }
+                });
+            } else {
+                alert(t("fillAllFields"))
+            }
         } else {
             alert(t("passwordsNotMatch"))
         }
@@ -115,7 +117,9 @@ export default function Login() {
                         <h6 htmlFor="nameInput"
                             className="form-label">{t("nameInput")}</h6>
                         <input type="text" className="form-control"
-                               id="nameInput" onChange={event => {
+                               id="nameInput"
+                               required={true}
+                               value={registerData.name} onChange={event => {
                             setRegisterData({...registerData, name: event.target.value})
                         }}/>
 
@@ -125,6 +129,8 @@ export default function Login() {
                             className="form-label">{t("surnameInput")}</h6>
                         <input type="text" className="form-control"
                                id="surnameInput"
+                               required={true}
+                               value={registerData.surname}
                                onChange={event => {
                                    setRegisterData({
                                        ...registerData, surname: event.target.value
@@ -136,6 +142,8 @@ export default function Login() {
                         <h6 htmlFor="usernameInput"
                             className="form-label">{t("usernameInput")}</h6>
                         <input type="text" className="form-control" id="username"
+                               value={registerData.username}
+                               required={true}
                                onChange={event => {
                                    setRegisterData({
                                        ...registerData, username: event.target.value
@@ -149,6 +157,8 @@ export default function Login() {
                             className="form-label">{t("emailInput")}</h6>
                         <input type="email" className="form-control"
                                id="emailInput"
+                               required={true}
+                               value={registerData.email}
                                onChange={event => {
                                    setRegisterData({
                                        ...registerData, email: event.target.value
@@ -162,6 +172,8 @@ export default function Login() {
                             className="form-label">{t("passwordInput")}</h6>
                         <input type="password" className="form-control"
                                id="passwordInput"
+                               required={true}
+                               value={registerData.password}
                                onChange={event => {
                                    setRegisterData({
                                        ...registerData, password: event.target.value
@@ -174,6 +186,8 @@ export default function Login() {
                             className="form-label">{t("password2Input")}</h6>
                         <input type="password" className="form-control"
                                id="password2Input"
+                               required={true}
+                               value={registerData.password2}
                                onChange={event => {
                                    setRegisterData({
                                        ...registerData, password2: event.target.value

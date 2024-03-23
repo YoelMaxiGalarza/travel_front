@@ -1,8 +1,10 @@
 import {useTranslation} from "react-i18next";
-import {HttpResourceFactory} from "../../../components/core/resourcefactory/HttpResourceFactory";
-import {useEffect, useState} from "react";
-import {useRouter} from "next/navigation";
+
+import {useContext, useEffect, useState} from "react";
 import Sidebar from "../../../components/navbar/Sidebar";
+import RoleResourceFactory from "../../../components/core/resourcefactory/RoleResourceFactory";
+import UserManagementNavbar from "../../../components/navbar/UserManagementNavbar";
+import {HttpResourceContext} from "../../../components/core/context/CustomContext";
 
 /**
  *
@@ -13,16 +15,15 @@ import Sidebar from "../../../components/navbar/Sidebar";
  */
 export default function Roles() {
     const [t, i18n] = useTranslation('common');
-    const httpResource = HttpResourceFactory.create();
+    const {http, router} = useContext(HttpResourceContext);
     const [roles, setRoles] = useState([{}]);
-    const [role, setRole] = useState({});
-    const router = useRouter()
+    const roleResource = RoleResourceFactory.create(http);
 
     async function getAllRoles() {
         setRoles([{}])
-        const response = await httpResource.get("/roles", sessionStorage.getItem('Authorization'));
-        const roles = await response.json();
-        setRoles(roles);
+        const response = await roleResource.getAllRoles(localStorage.getItem('Authorization'));
+        const role = await response.json();
+        setRoles(role);
     }
 
     useEffect(() => {
@@ -32,73 +33,75 @@ export default function Roles() {
 
     async function handleEditRole(roleId) {
         router.push({
-            pathname: '/admin/roles/view', query: {roleId: roleId}
+            pathname: '/admin/roles/edit', query: {roleId: roleId}
         })
     }
 
 
-    function removeRole(roleId) {
-        console.log("removeRole", roleId);
+    async function deleteRole(roleId) {
+        await roleResource.deleteRole(roleId, localStorage.getItem("Authorization"));
+        await getAllRoles();
     }
 
     return (<>
-        <Sidebar />
+        <Sidebar/>
+        <br/>
+        <UserManagementNavbar/>
 
-        <div className="blog-wrapper mb-3">
-            <div className="row">
-                <h1>Roles</h1>
-                <div className="col-sm-1"></div>
-                <div className="col">
-                    <div className="container card ">
-                        <div className="card-body">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#Id</th>
-                                        <th scope="col">name</th>
-                                        <th scope="col">description</th>
-                                        <th scope="col">enabled</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {roles.map((role, index) => {
-                                    return <tr key={role.id}>
-                                        <th scope="row" onClick={event => {
-                                            handleEditRole(role.id)
-                                        }}>{role.id}</th>
-                                        <td onClick={event => {
-                                            handleEditRole(role.id)
-                                        }}>{role.name}</td>
-                                        <td onClick={event => {
-                                            handleEditRole(role.id)
-                                        }}>{role.description}</td>
-                                        <td onClick={event => {
-                                            handleEditRole(role.id)
-                                        }}><input className="form-check-input" type="checkbox"
-                                                  value=""
-                                                  id="flexCheckChecked"
-                                                  defaultChecked={!role.disabled} disabled/>
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-danger "
-                                                    onClick={event => removeRole(role.id)}>
-                                                <i className="fa-solid fa-trash">{}</i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                })}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        <div className="blog-wrapper ">
+            <div className="card ">
+                <div className="card-body">
+                    <ul className="nav">
+                        <li className="d-flex">
+                            <input className="form-control mb-3" type="search"
+                                   placeholder="Search"
+                                   aria-label="Search"/>
+                        </li>
+                        <li className="nav-item">
+                            <button type="button" className="btn "
+                                    onClick={event => {
+                                        router.push("/admin/roles/create")
+                                    }}>Add Role
+                            </button>
+                        </li>
+                    </ul>
+                    <table className="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#Id</th>
+                            <th scope="col">name</th>
+                            <th scope="col">description</th>
+                            <th scope="col">enabled</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {roles.map((role, index) => {
+                            return <tr key={role.id}>
+                                <th>{role.id}</th>
+                                <td>{role.name}</td>
+                                <td>{role.description}</td>
+                                <td><input className="form-check-input" type="checkbox"
+                                           value=""
+                                           id="flexCheckChecked"
+                                           defaultChecked={!role.disabled} disabled/>
+                                </td>
+                                <td>
+
+
+                                    <button className="btn btn-success "
+                                            onClick={event => handleEditRole(role.id)}>
+                                        <i className="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <button className="btn btn-danger "
+                                            onClick={event => deleteRole(role.id)}>
+                                        <i className="fa-solid fa-trash">{}</i>
+                                    </button>
+                                </td>
+                            </tr>
+                        })}
+                        </tbody>
+                    </table>
                 </div>
-                <div className="col-sm-1">
-                    <button type="button" className="btn btn-primary" onClick={event => {
-                        router.push("/admin/roles/create")
-                    }}>Add Role
-                    </button>
-                </div>
-                <div className="col-sm-1"></div>
             </div>
         </div>
     </>);

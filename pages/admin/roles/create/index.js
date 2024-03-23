@@ -1,29 +1,32 @@
 import {useTranslation} from "react-i18next";
-import {HttpResourceFactory} from "../../../../components/core/resourcefactory/HttpResourceFactory";
 import {useContext, useState} from "react";
 import {useRouter} from "next/navigation";
 import Sidebar from "../../../../components/navbar/Sidebar";
-import {HttpResourceContext} from "../../../../components/core/context";
+import UserManagementNavbar from "../../../../components/navbar/UserManagementNavbar";
+import {HttpResourceContext} from "../../../../components/core/context/CustomContext";
+import RoleResourceFactory
+    from "../../../../components/core/resourcefactory/RoleResourceFactory";
 
 export default function CreateRole() {
     const [t, i18n] = useTranslation('common');
-    const {roleResource} = useContext(HttpResourceContext);
+    const {http,router} = useContext(HttpResourceContext);
     const [role, setRole] = useState({name: "", description: "", disabled: false});
-    const router = useRouter()
+    const roleResource = RoleResourceFactory.create(http);
 
     const createRole = async (event) => {
         event.preventDefault();
-        await roleResource.createRole(JSON.stringify(role), sessionStorage.getItem('Authorization'));
-        router.push('/admin/user/roles')
+        await roleResource.createRole(JSON.stringify(role), localStorage.getItem('Authorization'));
+        router.push('/admin/roles')
     }
     return (<>
         <Sidebar/>
+        <br/>
+        <UserManagementNavbar/>
         <div>
-            <div className="col">
-                <h1>{t("createRole")}</h1>
-                <form href="#" className={"container"} onSubmit={createRole}>
-                    <div className="card">
-                        <div className="card-body">
+            <div className="blog-wrapper">
+                <div className="card">
+                    <div className="card-body">
+                        <form href="#" className={""} onSubmit={createRole}>
                             <div className="mb-3">
                                 <label htmlFor="name"
                                        className="form-label">{t("name")}</label>
@@ -62,9 +65,10 @@ export default function CreateRole() {
                                 <input className="btn btn-primary" type='submit'
                                        value='Submit'/>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                </form>
+                </div>
+
             </div>
         </div>
     </>)
