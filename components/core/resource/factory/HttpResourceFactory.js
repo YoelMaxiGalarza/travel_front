@@ -8,7 +8,7 @@ export class HttpResourceFactory {
   constructor(baseUrl = "http://localhost:8080/api") {
     this.baseUrl = baseUrl;
     this.defaultHeaders = {
-      Accept: "application/json",
+      "Accept": "application/json",
       "Content-Type": "application/json",
     };
   }
@@ -22,16 +22,13 @@ export class HttpResourceFactory {
    * @returns {Promise<object>} - The response data in JSON format.
    * @throws Will throw an error if the HTTP response is not successful.
    */
-  async _doRequest(endpoint, method, body = null, authKey = null) {
-    const headers = {
-      ...this.defaultHeaders,
-      ...(authKey && { Authorization: `Basic ${authKey}` }),
-    };
+  async _doRequest(endpoint, method, body = null, headers = {}) {
+
 
     const requestOptions = {
       method,
       headers,
-      ...(body && { body: JSON.stringify(body) }),
+      body,
     };
 
     try {
@@ -55,7 +52,8 @@ export class HttpResourceFactory {
    * @returns {Promise<object>} - The response data in JSON format.
    */
   async get(endpoint, authKey = null) {
-    return this._doRequest(endpoint, "GET", null, authKey);
+    this.defaultHeaders["Authorization"] = authKey;
+    return this._doRequest(endpoint, "GET", null,this.defaultHeaders);
   }
 
   /**
@@ -67,7 +65,8 @@ export class HttpResourceFactory {
    * @returns {Promise<object>} - The response data in JSON format.
    */
   async post(endpoint, body, authKey = null) {
-    return this._doRequest(endpoint, "POST", body, authKey);
+    this.defaultHeaders["Authorization"] = authKey;
+    return this._doRequest(endpoint, "POST", body,this.defaultHeaders);
   }
 
   /**
@@ -79,8 +78,9 @@ export class HttpResourceFactory {
    * @throws Will throw an error if authentication fails or data is missing.
    */
   async authenticate(username, password) {
-    const authKey = btoa(`${username}:${password}`);
-    const response = await this._doRequest("/authenticate", "POST", null, authKey);
+    const response = await this._doRequest("/authenticate", "POST", JSON.stringify({
+      username: username, password: password
+    }), this.defaultHeaders);
 
     if (response.username && response.base64EncodedAuthenticationKey) {
       localStorage.setItem("Authorization", `Basic ${response.base64EncodedAuthenticationKey}`);
